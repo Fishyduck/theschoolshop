@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout Summary - The School Shop</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Additional styling to make the summary visually appealing */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #2d89ef;
+      padding: 15px 0;
+      text-align: center;
+      position: relative;
+    }
+
+    header h1 {
+      color: white;
+      font-size: 24px;
+      margin: 0;
+    }
+
+    .nav-bar {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+    }
+
+    .nav-bar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 15px;
+    }
+
+    .nav-bar a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    main {
+      background-color: #ffffff;
+      padding: 20px;
+      max-width: 800px;
+      margin: 20px auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #333;
+      text-align: center;
+    }
+
+    .order-details {
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .instructions {
+      background-color: #f4f4f4;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .instructions p {
+      margin: 10px 0;
+      color: #555;
+    }
+
+    .instructions strong {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Checkout Summary</h1>
+    <nav class="nav-bar">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="cart.html">Cart</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Order Summary</h2>
+    <div id="order-summary"></div>
+    <p class="order-details"><strong>Name:</strong> <span id="order-name">XXX</span></p>
+    <p class="order-details"><strong>Location:</strong> <span id="order-location">XXX</span></p>
+    <p class="order-details"><strong>Date:</strong> <span id="order-date">XXX</span></p>
+    <p class="order-details"><strong>Time:</strong> <span id="order-time">XXX</span></p>
+    <p class="order-details"><strong>Total Price:</strong> $<span id="total-price">0.00</span></p>
+
+    <div class="instructions">
+      <h3>Instructions</h3>
+      <p><strong>Copy & Paste this and email it to:</strong> <a href="mailto:theschoolshopowner@gmail.com">theschoolshopowner@gmail.com</a></p>
+      <p><strong>Suggestions?</strong> Send them to <a href="mailto:theschoolshopowner@gmail.com">theschoolshopowner@gmail.com</a>!</p>
+      <p><strong>If I am not there:</strong> I am most likely absent and will email for a reschedule, most likely the next day.</p>
+      <p><strong>Note:</strong> Currently, we only take <strong>cash</strong>!</p>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 The School Shop. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Load checkout summary from sessionStorage
+    function loadCheckoutSummary() {
+      const checkoutCart = JSON.parse(sessionStorage.getItem("checkoutCart")) || [];
+      const orderName = sessionStorage.getItem("orderName") || "XXX";
+      const orderLocation = sessionStorage.getItem("orderLocation") || "XXX";
+      const orderDate = sessionStorage.getItem("orderDate") || "XXX";
+      const orderTime = sessionStorage.getItem("orderTime") || "XXX";
+
+      const orderSummary = document.getElementById("order-summary");
+      const totalElement = document.getElementById("total-price");
+      const nameElement = document.getElementById("order-name");
+      const locationElement = document.getElementById("order-location");
+      const dateElement = document.getElementById("order-date");
+      const timeElement = document.getElementById("order-time");
+
+      let total = 0;
+
+      // Display cart items
+      orderSummary.innerHTML = "";
+      checkoutCart.forEach((item) => {
+        total += item.price * item.quantity;
+        orderSummary.innerHTML += `<p>${item.name} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}</p>`;
+      });
+
+      // Update summary details
+      totalElement.textContent = total.toFixed(2);
+      nameElement.textContent = orderName;
+      locationElement.textContent = orderLocation;
+      dateElement.textContent = orderDate;
+      timeElement.textContent = orderTime;
+    }
+
+    // Load the summary when the page loads
+    document.addEventListener("DOMContentLoaded", loadCheckoutSummary);
+  </script>
+</body>
+</html>

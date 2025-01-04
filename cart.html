@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart - The School Shop</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Your Cart</h1>
+    <nav>
+      <ul class="nav-bar">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="cart.html" class="active">Cart</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div id="cart-items"></div>
+    <div id="cart-total"></div>
+
+    <!-- Checkout Form -->
+    <h2>Checkout</h2>
+    <form id="checkout-form">
+      <!-- Name Field -->
+      <label for="name">Name:</label>
+      <input type="text" id="name" required><br><br>
+
+<!-- Location Buttons with Images -->
+<label>Location:</label><br>
+<div class="location-options">
+  <button type="button" class="location-option" data-location="Upper Lot Entrance Benches">
+    <img src="images/location-a.png" alt="Upper Lot Entrance">
+    <span>Upper Lot Entrance Benches</span>
+  </button>
+  <button type="button" class="location-option" data-location="Library Front Benches">
+    <img src="images/location-b.png" alt="Library Front Benches">
+    <span>Library Front Benches</span>
+  </button>
+  <button type="button" class="location-option" data-location="Up Stairs Between Lower-Upper Lot">
+    <img src="images/location-c.png" alt="Up Stairs Between Lower-Upper Lot">
+    <span>Up Stairs Between Lower-Upper Lot</span>
+  </button>
+</div>
+
+      <!-- Time and Date Fields -->
+      <label for="time-options">Time:</label>
+      <div id="time-options"></div><br>
+
+      <label for="date">Date:</label>
+      <input type="date" id="date" required><br><br>
+
+      <!-- Checkout Button -->
+      <button type="submit" id="checkout-button">Checkout</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 The School Shop. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
