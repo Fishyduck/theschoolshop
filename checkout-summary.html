@@ -6,33 +6,29 @@
   <title>Checkout Summary - The School Shop</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* Additional styling to make the summary visually appealing */
+    /* Styling for the summary page */
     body {
       font-family: Arial, sans-serif;
       background-color: #f9f9f9;
       margin: 0;
       padding: 0;
     }
-
     header {
       background-color: #2d89ef;
       padding: 15px 0;
       text-align: center;
       position: relative;
     }
-
     header h1 {
       color: white;
       font-size: 24px;
       margin: 0;
     }
-
     .nav-bar {
       position: absolute;
       top: 15px;
       right: 20px;
     }
-
     .nav-bar ul {
       list-style: none;
       padding: 0;
@@ -40,13 +36,11 @@
       display: flex;
       gap: 15px;
     }
-
     .nav-bar a {
       color: white;
       text-decoration: none;
       font-weight: bold;
     }
-
     main {
       background-color: #ffffff;
       padding: 20px;
@@ -55,33 +49,47 @@
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
-
     h2 {
       color: #333;
       text-align: center;
     }
-
     .order-details {
       padding: 10px 0;
       border-bottom: 1px solid #ddd;
     }
-
     .instructions {
       background-color: #f4f4f4;
       padding: 15px;
       border-radius: 8px;
       margin-top: 20px;
     }
-
     .instructions p {
       margin: 10px 0;
       color: #555;
     }
-
     .instructions strong {
       color: #333;
     }
+    button {
+      background-color: #2d89ef;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #1a5bbf;
+    }
   </style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+(function() {
+  emailjs.init('UG4j1Dx-TPAynkqVA');
+})();
+  </script>
 </head>
 <body>
   <header>
@@ -97,20 +105,23 @@
 
   <main>
     <h2>Order Summary</h2>
+    <!-- Dynamic order details -->
+    <p class="order-details"><strong>Email Subject:</strong> <span id="order-date-time"></span></p>
     <div id="order-summary"></div>
-    <p class="order-details"><strong>Name:</strong> <span id="order-name">XXX</span></p>
-    <p class="order-details"><strong>Location:</strong> <span id="order-location">XXX</span></p>
-    <p class="order-details"><strong>Date:</strong> <span id="order-date">XXX</span></p>
-    <p class="order-details"><strong>Time:</strong> <span id="order-time">XXX</span></p>
+    <p class="order-details"><strong>Name:</strong> <span id="order-name">Loading...</span></p>
+    <p class="order-details"><strong>Location:</strong> <span id="order-location">Loading...</span></p>
+    <p class="order-details"><strong>Date:</strong> <span id="order-date">Loading...</span></p>
+    <p class="order-details"><strong>Time:</strong> <span id="order-time">Loading...</span></p>
     <p class="order-details"><strong>Total Price:</strong> $<span id="total-price">0.00</span></p>
 
     <div class="instructions">
-      <h3>Instructions</h3>
-      <p><strong>Copy & Paste this and email it to:</strong> <a href="mailto:theschoolshopowner@gmail.com">theschoolshopowner@gmail.com</a></p>
+      <h3>Tips</h3>
       <p><strong>Suggestions?</strong> Send them to <a href="mailto:theschoolshopowner@gmail.com">theschoolshopowner@gmail.com</a>!</p>
       <p><strong>If I am not there:</strong> I am most likely absent and will email for a reschedule, most likely the next day.</p>
       <p><strong>Note:</strong> Currently, we only take <strong>cash</strong>!</p>
     </div>
+
+    <button id="send-email">Confirm Order</button>
   </main>
 
   <footer>
@@ -121,10 +132,10 @@
     // Load checkout summary from sessionStorage
     function loadCheckoutSummary() {
       const checkoutCart = JSON.parse(sessionStorage.getItem("checkoutCart")) || [];
-      const orderName = sessionStorage.getItem("orderName") || "XXX";
-      const orderLocation = sessionStorage.getItem("orderLocation") || "XXX";
-      const orderDate = sessionStorage.getItem("orderDate") || "XXX";
-      const orderTime = sessionStorage.getItem("orderTime") || "XXX";
+      const orderName = sessionStorage.getItem("orderName") || "Not provided";
+      const orderLocation = sessionStorage.getItem("orderLocation") || "Not provided";
+      const orderDate = sessionStorage.getItem("orderDate") || "Not provided";
+      const orderTime = sessionStorage.getItem("orderTime") || "Not provided";
 
       const orderSummary = document.getElementById("order-summary");
       const totalElement = document.getElementById("total-price");
@@ -132,6 +143,7 @@
       const locationElement = document.getElementById("order-location");
       const dateElement = document.getElementById("order-date");
       const timeElement = document.getElementById("order-time");
+      const emailSubjectElement = document.getElementById("order-date-time");
 
       let total = 0;
 
@@ -142,16 +154,45 @@
         orderSummary.innerHTML += `<p>${item.name} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}</p>`;
       });
 
-      // Update summary details
+      // Update order details
       totalElement.textContent = total.toFixed(2);
       nameElement.textContent = orderName;
       locationElement.textContent = orderLocation;
       dateElement.textContent = orderDate;
       timeElement.textContent = orderTime;
+      emailSubjectElement.textContent = `${orderDate} at ${orderTime}`;
     }
 
+    // Send email using EmailJS
+    document.getElementById('send-email').addEventListener('click', function() {
+      let message = `
+        Order Summary:
+        - Name: ${document.getElementById('order-name').textContent}
+        - Location: ${document.getElementById('order-location').textContent}
+        - Date: ${document.getElementById('order-date').textContent}
+        - Time: ${document.getElementById('order-time').textContent}
+        - Total Price: $${document.getElementById('total-price').textContent}
+        \nProducts:\n`;
+
+      // Add products to the message
+      const checkoutCart = JSON.parse(sessionStorage.getItem("checkoutCart")) || [];
+      checkoutCart.forEach((item) => {
+        message += `${item.name} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}\n`;
+      });
+
+      emailjs.send('service_5zj3lxd', 'template_aen9nyh', {
+        order_subject: document.getElementById('order-date-time').textContent,
+        message: message
+      }).then(() => {
+        alert('Order successfully confirmed!');
+      }).catch((error) => {
+        alert('Failed to confirm the order. Please try again.');
+        console.error('EmailJS Error:', error);
+      });
+    });
+
     // Load the summary when the page loads
-    document.addEventListener("DOMContentLoaded", loadCheckoutSummary);
+    document.addEventListener('DOMContentLoaded', loadCheckoutSummary);
   </script>
 </body>
 </html>

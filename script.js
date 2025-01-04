@@ -112,24 +112,9 @@ function handleCheckout() {
   const checkoutForm = document.getElementById("checkout-form");
   if (!checkoutForm) return;
 
-  // Load saved form data
   loadCheckoutFormData();
-
-  // Dynamically populate time options based on the day of the week
-  const dayOfWeek = new Date().getDay();
-  const timeOptions = dayOfWeek === 1
-    ? ["8:45 AM (Before School)", "10:50 AM (Break)", "12:55 PM (Lunch)"] // Monday
-    : ["8:15 AM (Before School)", "10:15 AM (Break)", "12:55 PM (Lunch)"]; // Tuesday to Friday
-
-  const timeContainer = document.getElementById("time-options");
-  timeContainer.innerHTML = "";
-  timeOptions.forEach((time) => {
-    const button = document.createElement("button");
-    button.classList.add("time-option");
-    button.textContent = time;
-    button.dataset.time = time;
-    timeContainer.appendChild(button);
-  });
+  populateTimeOptions();
+  restrictWeekendDates();
 
   let selectedLocation = "";
   let selectedTime = "";
@@ -138,8 +123,8 @@ function handleCheckout() {
   document.querySelectorAll(".location-option").forEach((button) => {
     button.addEventListener("click", () => {
       selectedLocation = button.getAttribute("data-location");
-      document.querySelectorAll(".location-option").forEach((btn) => btn.classList.remove("selected"));
-      button.classList.add("selected");
+      document.querySelectorAll(".location-option").forEach((btn) => btn.style.border = "none");
+      button.style.border = "2px solid #2d89ef";
     });
   });
 
@@ -153,48 +138,96 @@ function handleCheckout() {
     });
   });
 
-  // Save form data on input change
-  checkoutForm.addEventListener("input", saveCheckoutFormData);
-
-  // Handle form submission
-  checkoutForm.addEventListener("submit", (e) => {
+  // Checkout button validation and submission
+  document.getElementById("checkout-button").addEventListener("click", (e) => {
     e.preventDefault();
-
-    if (cart.length === 0) {
-      alert("Your cart is empty. Please add items to the cart before checking out.");
-      return;
-    }
-
-    if (!selectedLocation) {
-      alert("Please select a location.");
-      return;
-    }
-
-    if (!selectedTime) {
-      alert("Please select a time.");
-      return;
-    }
 
     const name = document.getElementById("name").value;
     const date = document.getElementById("date").value;
+    const now = new Date();
+    const selectedDate = new Date(date + " " + selectedTime);
+
+    // Check if the selected date is a weekend
+    const dayOfWeek = selectedDate.getUTCDay();
+    if (dayOfWeek === 0 || dayOfWeek === 6) {
+      alert("Orders cannot be placed on weekends. Please select a weekday.");
+      return;
+    }
+
+    // Ensure time is at least 1 hour from now
+    if (selectedDate - now < 3600000) {
+      alert("Please select a time that is at least 1 hour in the future.");
+      return;
+    }
+
+    // Ensure required fields are filled
+    if (!name || !date || !selectedLocation || !selectedTime) {
+      alert(`Please fill out the following missing fields:\n${!name ? '- Name\n' : ''}${!date ? '- Date\n' : ''}${!selectedLocation ? '- Location\n' : ''}${!selectedTime ? '- Time\n' : ''}`);
+      return;
+    }
 
     // Store order details in sessionStorage
     sessionStorage.setItem("checkoutCart", JSON.stringify(cart));
     sessionStorage.setItem("orderName", name);
     sessionStorage.setItem("orderLocation", selectedLocation);
-    sessionStorage.setItem("orderTime", selectedTime);
+    sessionStorage.setItem("orderTime", formatTime(selectedTime, date));
     sessionStorage.setItem("orderDate", date);
 
+    // Redirect to checkout summary
     window.location.href = "checkout-summary.html";
   });
 }
 
-// Save form data to localStorage
-function saveCheckoutFormData() {
-  const name = document.getElementById("name").value;
-  const date = document.getElementById("date").value;
-  localStorage.setItem("checkoutFormName", name);
-  localStorage.setItem("checkoutFormDate", date);
+// Function to format time based on the selected date
+function formatTime(time, date) {
+  const dayOfWeek = new Date(date).getUTCDay();
+  if (dayOfWeek === 1) { // Monday
+    if (time.includes("8:15")) return "8:45 AM";
+    if (time.includes("10:15")) return "10:50 AM";
+  }
+  return time.split(" / ")[0];
+}
+
+// Function to populate time options dynamically
+function populateTimeOptions() {
+  const timeOptions = [
+    "8:15 AM / 8:45 AM (Before School)",
+    "10:15 AM / 10:50 AM (Break)",
+    "12:55 PM (Lunch)",
+  ];
+
+  const timeContainer = document.getElementById("time-options");
+  if (!timeContainer) return;
+
+  timeContainer.innerHTML = "";
+  timeOptions.forEach((time) => {
+    const button = document.createElement("button");
+    button.classList.add("time-option");
+    button.textContent = time;
+    button.dataset.time = time;
+    timeContainer.appendChild(button);
+  });
+}
+
+// Function to restrict weekends in the date picker
+function restrictWeekendDates() {
+  const dateInput = document.getElementById("date");
+  if (!dateInput) return;
+
+  dateInput.addEventListener("input", () => {
+    const selectedDate = new Date(dateInput.value);
+    const day = selectedDate.getUTCDay();
+
+    if (day === 0 || day === 6) {
+      alert("Orders cannot be placed on weekends. Please select a weekday.");
+      dateInput.value = "";
+    }
+  });
+}
+
+// Save cart to localStorage
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 // Load form data from localStorage
@@ -206,23 +239,34 @@ function loadCheckoutFormData() {
   if (date) document.getElementById("date").value = date;
 }
 
-// Save cart to localStorage
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
+// Load checkout summary from sessionStorage
+function loadCheckoutSummary() {
+  const checkoutCart = JSON.parse(sessionStorage.getItem("checkoutCart")) || [];
+  const orderName = sessionStorage.getItem("orderName") || "XXX";
+  const orderLocation = sessionStorage.getItem("orderLocation") || "XXX";
+  const orderDate = sessionStorage.getItem("orderDate") || "XXX";
+  const orderTime = sessionStorage.getItem("orderTime") || "XXX";
+
+  const orderSummary = document.getElementById("order-summary");
+  let total = 0;
+
+  orderSummary.innerHTML = "";
+  checkoutCart.forEach((item) => {
+    total += item.price * item.quantity;
+    orderSummary.innerHTML += `<p>${item.name} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}</p>`;
+  });
+
+  document.getElementById("order-name").textContent = orderName;
+  document.getElementById("order-location").textContent = orderLocation;
+  document.getElementById("summary-order-date").textContent = orderDate;
+  document.getElementById("summary-order-time").textContent = orderTime;
 }
 
 // Initialize functionality
 document.addEventListener("DOMContentLoaded", () => {
-  if (document.getElementById("products")) {
-    displayProducts();
-  }
-
-  if (document.getElementById("cart-items")) {
-    updateCartDisplay();
-    handleCheckout();
-  }
-
-  if (document.getElementById("order-summary")) {
-    loadCheckoutSummary();
-  }
+  if (document.getElementById("products")) displayProducts();
+  if (document.getElementById("cart-items")) updateCartDisplay();
+  if (document.getElementById("checkout-form")) handleCheckout();
+  if (document.getElementById("order-summary")) loadCheckoutSummary();
 });
+
