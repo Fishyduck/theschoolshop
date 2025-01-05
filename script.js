@@ -232,14 +232,13 @@ function handleCheckout() {
     const now = new Date();
     const selectedDateTime = new Date(`${date} ${selectedTimeText.split(" / ")[0]}`);
 
-    // Prevent weekend orders
-const selectedDate = new Date(date);
-const dayOfWeek = selectedDate.getDay();
-
+   // ✅ Prevent weekend orders
+const dayOfWeek = selectedDateTime.getDay();
 if (dayOfWeek === 0 || dayOfWeek === 6) {
   alert("Orders cannot be placed on weekends. Please select a weekday.");
   return;
 }
+
 
     // Ensure the selected date and time is at least 1 hour in the future
     const timeDifference = selectedDateTime - now;
