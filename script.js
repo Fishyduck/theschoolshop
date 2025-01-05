@@ -66,10 +66,10 @@ let cart = JSON.parse(localStorage.getItem("cart")) || [];
 // Function to display products on the products page
 function displayProducts() {
   const products = [
-    { id: 1, name: "Cool Ranch Doritos", price: 1.5 },
-    { id: 2, name: "Nacho Cheese Doritos", price: 1.5 },
-    { id: 3, name: "Cheeto Puffs", price: 1.5 },
-    { id: 4, name: "Cheetos", price: 1.5 }
+    { id: 1, name: "Cool Ranch Doritos", price: 1.5, image: "images/doritos-cr.png" },
+    { id: 2, name: "Nacho Cheese Doritos", price: 1.5, image: "images/doritos-nc.png" },
+    { id: 3, name: "Cheeto Puffs", price: 1.5, image: "images/cheetos-p.png" },
+    { id: 4, name: "Cheetos", price: 1.5, image: "images/cheetos.png" }
   ];
 
   const productContainer = document.getElementById("products");
@@ -82,6 +82,7 @@ function displayProducts() {
     const productCard = document.createElement("div");
     productCard.className = "product-card";
     productCard.innerHTML = `
+      <img src="${product.image}" alt="${product.name}" class="product-image">
       <h3>${product.name}</h3>
       <p>Price: $${product.price.toFixed(2)}</p>
       <p class="stock-info">Stock: ${stock}</p>
