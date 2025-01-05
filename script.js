@@ -4,9 +4,10 @@ let cart = JSON.parse(localStorage.getItem("cart")) || [];
 // Function to display products on the products page
 function displayProducts() {
   const products = [
-    { id: 1, name: "Product A", price: 10, description: "Description of Product A" },
-    { id: 2, name: "Product B", price: 15, description: "Description of Product B" },
-    { id: 3, name: "Product C", price: 20, description: "Description of Product C" },
+    { id: 1, name: "Cool Ranch Doritos", price: 1.5 },
+    { id: 2, name: "Nacho Cheese Doritos", price: 1.5 },
+    { id: 3, name: "Cheeto Puffs", price: 1.5 },
+    { id: 4, name: "Cheetos", price: 1.5 }
   ];
 
   const productContainer = document.getElementById("products");
@@ -15,21 +16,25 @@ function displayProducts() {
   productContainer.innerHTML = "";
 
   products.forEach((product) => {
+    const stock = localStorage.getItem(`product_${product.id}_stock`) || "Loading...";
     const productCard = document.createElement("div");
     productCard.className = "product-card";
     productCard.innerHTML = `
       <h3>${product.name}</h3>
-      <p>${product.description}</p>
       <p>Price: $${product.price.toFixed(2)}</p>
-      <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
+      <p class="stock-info">Stock: ${stock}</p>
+      <button class="add-to-cart" data-id="${product.id}" ${stock === "0" ? "disabled" : ""}>
+        ${stock === "0" ? "Out of Stock" : "Add to Cart"}
+      </button>
     `;
     productContainer.appendChild(productCard);
   });
 
+  // ✅ Attach event listeners to the "Add to Cart" buttons after rendering
   document.querySelectorAll(".add-to-cart").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      const productId = parseInt(event.target.getAttribute("data-id"));
-      const product = products.find((p) => p.id === productId);
+    button.addEventListener("click", function () {
+      const productId = parseInt(this.getAttribute("data-id"));
+      const product = products.find((item) => item.id === productId);
       if (product) {
         addToCart(product);
       }
@@ -108,13 +113,13 @@ function removeFromCart(productId) {
 }
 
 // Function to handle checkout
+// Function to handle checkout
 function handleCheckout() {
   const checkoutForm = document.getElementById("checkout-form");
   if (!checkoutForm) return;
 
   loadCheckoutFormData();
   populateTimeOptions();
-  restrictWeekendDates();
 
   let selectedLocation = "";
   let selectedTime = "";
@@ -142,27 +147,38 @@ function handleCheckout() {
   document.getElementById("checkout-button").addEventListener("click", (e) => {
     e.preventDefault();
 
+    if (cart.length === 0) {
+      alert("Your cart is empty. Please add items before proceeding to checkout.");
+      return;
+    }
+
     const name = document.getElementById("name").value;
     const date = document.getElementById("date").value;
-    const now = new Date();
-    const selectedDate = new Date(date + " " + selectedTime);
+    if (!date || !selectedTime) {
+      alert("Please select a valid date and time.");
+      return;
+    }
 
-    // Check if the selected date is a weekend
-    const dayOfWeek = selectedDate.getUTCDay();
+    const now = new Date();
+    const selectedDateTime = new Date(`${date} ${selectedTime.split(" / ")[0]}`);
+
+    // ✅ Prevent weekend orders
+    const dayOfWeek = selectedDateTime.getDay();
     if (dayOfWeek === 0 || dayOfWeek === 6) {
       alert("Orders cannot be placed on weekends. Please select a weekday.");
       return;
     }
 
-    // Ensure time is at least 1 hour from now
-    if (selectedDate - now < 3600000) {
+    // ✅ Ensure the selected date and time is at least 1 hour in the future
+    const timeDifference = selectedDateTime - now;
+    if (timeDifference < 3600000) {
       alert("Please select a time that is at least 1 hour in the future.");
       return;
     }
 
     // Ensure required fields are filled
-    if (!name || !date || !selectedLocation || !selectedTime) {
-      alert(`Please fill out the following missing fields:\n${!name ? '- Name\n' : ''}${!date ? '- Date\n' : ''}${!selectedLocation ? '- Location\n' : ''}${!selectedTime ? '- Time\n' : ''}`);
+    if (!name || !selectedLocation || !selectedTime) {
+      alert(`Please fill out the following missing fields:\n${!name ? '- Name\n' : ''}${!selectedLocation ? '- Location\n' : ''}${!selectedTime ? '- Time\n' : ''}`);
       return;
     }
 
@@ -180,8 +196,8 @@ function handleCheckout() {
 
 // Function to format time based on the selected date
 function formatTime(time, date) {
-  const dayOfWeek = new Date(date).getUTCDay();
-  if (dayOfWeek === 1) { // Monday
+  const dayOfWeek = new Date(date).getDay();
+  if (dayOfWeek === 1) {
     if (time.includes("8:15")) return "8:45 AM";
     if (time.includes("10:15")) return "10:50 AM";
   }
@@ -216,7 +232,7 @@ function restrictWeekendDates() {
 
   dateInput.addEventListener("input", () => {
     const selectedDate = new Date(dateInput.value);
-    const day = selectedDate.getUTCDay();
+    const day = selectedDate.getDay();
 
     if (day === 0 || day === 6) {
       alert("Orders cannot be placed on weekends. Please select a weekday.");
@@ -270,3 +286,77 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("order-summary")) loadCheckoutSummary();
 });
 
+// Google Sheets API Integration for Stock Tracking
+const API_KEY = 'AIzaSyDqd1fC7NRMLVMDHMvhNtZC5O8rJqjNNeE';  // Your API Key
+const SHEET_ID = '13DiBvVe-jNM_o2CjdZXm34jLS0konxycmssb4BKpx8k';  // Your Sheet ID
+const SHEET_NAME = 'Sheet1';  // Your Sheet Name
+
+// Function to update stock in Google Sheets
+async function updateStockInSheet(productId, newStock) {
+  const updateUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}!E${productId + 1}?valueInputOption=RAW&key=${API_KEY}`;
+
+  const body = {
+    range: `${SHEET_NAME}!E${productId + 1}`,
+    majorDimension: 'ROWS',
+    values: [[newStock]],
+  };
+
+  try {
+    const response = await fetch(updateUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      console.error('Error updating stock in Google Sheets:', response.statusText);
+    } else {
+      console.log('Stock updated successfully.');
+    }
+  } catch (error) {
+    console.error('Error updating stock:', error);
+  }
+}
+
+// Function to load stock data from Google Sheets
+async function loadStockData() {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.values) {
+      updateProductStock(data.values);
+    } else {
+      console.error('Failed to load stock data from Google Sheets.');
+    }
+  } catch (error) {
+    console.error('Error loading stock data:', error);
+  }
+}
+
+// Function to update product stock on the products page
+function updateProductStock(sheetData) {
+  const products = document.querySelectorAll('.product-card');
+
+  products.forEach((product, index) => {
+    if (sheetData[index + 1] && sheetData[index + 1][4] !== undefined) {
+      const stockValue = sheetData[index + 1][4];
+      const stockElement = product.querySelector('.stock-info');
+
+      // Ensure stockElement exists before updating it
+      if (stockElement) {
+        stockElement.textContent = `Stock: ${stockValue}`;
+        localStorage.setItem(`product_${index + 1}_stock`, stockValue);
+      } else {
+        console.error(`Stock element not found for product at index ${index}`);
+      }
+    }
+  });
+}
+
+// Call the loadStockData function on page load
+document.addEventListener('DOMContentLoaded', loadStockData);

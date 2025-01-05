@@ -6,7 +6,6 @@
   <title>Checkout Summary - The School Shop</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* Styling for the summary page */
     body {
       font-family: Arial, sans-serif;
       background-color: #f9f9f9;
@@ -17,78 +16,68 @@
       background-color: #2d89ef;
       padding: 15px 0;
       text-align: center;
-      position: relative;
     }
     header h1 {
       color: white;
-      font-size: 24px;
       margin: 0;
     }
     .nav-bar {
-      position: absolute;
-      top: 15px;
-      right: 20px;
+      display: flex;
+      justify-content: space-around;
+      background-color: #2d89ef;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
     .nav-bar ul {
       list-style: none;
       padding: 0;
       margin: 0;
       display: flex;
-      gap: 15px;
+    }
+    .nav-bar li {
+      margin: 0 10px;
     }
     .nav-bar a {
       color: white;
       text-decoration: none;
-      font-weight: bold;
+      padding: 10px 15px;
+      background-color: #2d89ef;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    .nav-bar a:hover {
+      background-color: #1d6bc1;
     }
     main {
-      background-color: #ffffff;
-      padding: 20px;
       max-width: 800px;
       margin: 20px auto;
+      background-color: #fff;
+      padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
-    h2 {
-      color: #333;
-      text-align: center;
+    button {
+      background-color: #2d89ef;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1a5bbf;
     }
     .order-details {
       padding: 10px 0;
       border-bottom: 1px solid #ddd;
     }
-    .instructions {
-      background-color: #f4f4f4;
-      padding: 15px;
-      border-radius: 8px;
-      margin-top: 20px;
-    }
-    .instructions p {
-      margin: 10px 0;
-      color: #555;
-    }
-    .instructions strong {
-      color: #333;
-    }
-    button {
-      background-color: #2d89ef;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      font-size: 16px;
-      cursor: pointer;
-      border-radius: 5px;
-      margin-top: 20px;
-    }
-    button:hover {
-      background-color: #1a5bbf;
-    }
   </style>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
-(function() {
-  emailjs.init('UG4j1Dx-TPAynkqVA');
-})();
+    (function() {
+      emailjs.init('UG4j1Dx-TPAynkqVA');
+    })();
   </script>
 </head>
 <body>
@@ -105,9 +94,8 @@
 
   <main>
     <h2>Order Summary</h2>
-    <!-- Dynamic order details -->
-    <p class="order-details"><strong>Email Subject:</strong> <span id="order-date-time"></span></p>
-    <div id="order-summary"></div>
+    <p class="order-details"><strong>Email Subject:</strong> <span id="order-date-time">Loading...</span></p>
+    <div id="order-summary">Loading...</div>
     <p class="order-details"><strong>Name:</strong> <span id="order-name">Loading...</span></p>
     <p class="order-details"><strong>Location:</strong> <span id="order-location">Loading...</span></p>
     <p class="order-details"><strong>Date:</strong> <span id="order-date">Loading...</span></p>
@@ -117,9 +105,12 @@
     <div class="instructions">
       <h3>Tips</h3>
       <p><strong>Suggestions?</strong> Send them to <a href="mailto:theschoolshopowner@gmail.com">theschoolshopowner@gmail.com</a>!</p>
-      <p><strong>If I am not there:</strong> I am most likely absent, you can confirm if I am absent or not by checking the home page of the site!.</p>
+      <p><strong>If I am not there:</strong> I am most likely absent, you can confirm if I am absent or not by checking the home page of the site!</p>
       <p><strong>Note:</strong> Currently, we only take <strong>cash</strong>!</p>
     </div>
+
+    <label for="confirmation-email">Confirmation Email:</label>
+    <input type="email" id="confirmation-email" required>
 
     <button id="send-email">Confirm Order</button>
   </main>
@@ -129,70 +120,70 @@
   </footer>
 
   <script>
-    // Load checkout summary from sessionStorage
     function loadCheckoutSummary() {
       const checkoutCart = JSON.parse(sessionStorage.getItem("checkoutCart")) || [];
-      const orderName = sessionStorage.getItem("orderName") || "Not provided";
-      const orderLocation = sessionStorage.getItem("orderLocation") || "Not provided";
-      const orderDate = sessionStorage.getItem("orderDate") || "Not provided";
-      const orderTime = sessionStorage.getItem("orderTime") || "Not provided";
+      const orderName = sessionStorage.getItem("orderName") || "No Name Provided";
+      const orderLocation = sessionStorage.getItem("orderLocation") || "No Location Selected";
+      const orderDate = sessionStorage.getItem("orderDate") || "No Date Selected";
+      const orderTime = sessionStorage.getItem("orderTime") || "No Time Selected";
 
       const orderSummary = document.getElementById("order-summary");
-      const totalElement = document.getElementById("total-price");
-      const nameElement = document.getElementById("order-name");
-      const locationElement = document.getElementById("order-location");
-      const dateElement = document.getElementById("order-date");
-      const timeElement = document.getElementById("order-time");
-      const emailSubjectElement = document.getElementById("order-date-time");
-
       let total = 0;
 
-      // Display cart items
       orderSummary.innerHTML = "";
       checkoutCart.forEach((item) => {
         total += item.price * item.quantity;
         orderSummary.innerHTML += `<p>${item.name} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}</p>`;
       });
 
-      // Update order details
-      totalElement.textContent = total.toFixed(2);
-      nameElement.textContent = orderName;
-      locationElement.textContent = orderLocation;
-      dateElement.textContent = orderDate;
-      timeElement.textContent = orderTime;
-      emailSubjectElement.textContent = `${orderDate} at ${orderTime}`;
+      document.getElementById("order-name").textContent = orderName;
+      document.getElementById("order-location").textContent = orderLocation;
+      document.getElementById("order-date").textContent = orderDate;
+      document.getElementById("order-time").textContent = orderTime;
+      document.getElementById("total-price").textContent = total.toFixed(2);
+
+      // Update Email Subject
+      document.getElementById("order-date-time").textContent = `${orderDate} at ${orderTime}`;
     }
 
-    // Send email using EmailJS
-    document.getElementById('send-email').addEventListener('click', function() {
+    document.addEventListener("DOMContentLoaded", loadCheckoutSummary);
+
+    document.getElementById("send-email").addEventListener("click", function () {
+      const emailInput = document.getElementById("confirmation-email").value;
+      if (!emailInput) {
+        alert("Please enter your email address.");
+        return;
+      }
+
+      sessionStorage.setItem("orderEmail", emailInput);
+
       let message = `
         Order Summary:
-        - Name: ${document.getElementById('order-name').textContent}
-        - Location: ${document.getElementById('order-location').textContent}
-        - Date: ${document.getElementById('order-date').textContent}
-        - Time: ${document.getElementById('order-time').textContent}
-        - Total Price: $${document.getElementById('total-price').textContent}
+        - Name: ${document.getElementById("order-name").textContent}
+        - Location: ${document.getElementById("order-location").textContent}
+        - Date: ${document.getElementById("order-date").textContent}
+        - Time: ${document.getElementById("order-time").textContent}
+        - Email: ${emailInput}
+        - Total Price: $${document.getElementById("total-price").textContent}
         \nProducts:\n`;
 
-      // Add products to the message
       const checkoutCart = JSON.parse(sessionStorage.getItem("checkoutCart")) || [];
       checkoutCart.forEach((item) => {
         message += `${item.name} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}\n`;
       });
 
-      emailjs.send('service_5zj3lxd', 'template_aen9nyh', {
-        order_subject: document.getElementById('order-date-time').textContent,
-        message: message
-      }).then(() => {
-        alert('Order successfully confirmed!');
-      }).catch((error) => {
-        alert('Failed to confirm the order. Please try again.');
-        console.error('EmailJS Error:', error);
+      emailjs.send("service_5zj3lxd", "template_aen9nyh", {
+        order_subject: document.getElementById("order-date-time").textContent,
+        message: message,
+      })
+      .then(() => {
+        alert("Order successfully confirmed!");
+      })
+      .catch((error) => {
+        alert("Failed to confirm the order. Please try again.");
+        console.error("EmailJS Error:", error);
       });
     });
-
-    // Load the summary when the page loads
-    document.addEventListener('DOMContentLoaded', loadCheckoutSummary);
   </script>
 </body>
 </html>
