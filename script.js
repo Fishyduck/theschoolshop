@@ -1,3 +1,65 @@
+// ✅ Function to update the "Go to Cart" button with cart count
+function updateCartButton() {
+  const cartButtonContainer = document.getElementById("cart-button-container");
+  const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
+
+  if (itemCount > 0) {
+    cartButtonContainer.innerHTML = `
+      <button id="go-to-cart" onclick="window.location.href='cart.html'">
+        Go to Cart (${itemCount})
+      </button>
+    `;
+  } else {
+    cartButtonContainer.innerHTML = "";
+  }
+}
+
+// ✅ Ensure the button updates whenever the cart is modified
+document.addEventListener("DOMContentLoaded", () => {
+  updateCartButton();
+  document.addEventListener("cartUpdated", updateCartButton);
+});
+
+// ✅ Trigger "cartUpdated" event when adding to cart
+// Function to add items to the cart
+function addToCart(product) {
+  const existingProduct = cart.find((item) => item.id === product.id);
+
+  if (existingProduct) {
+    existingProduct.quantity++;
+  } else {
+    cart.push({ ...product, quantity: 1 });
+  }
+
+  saveCart();
+
+  // Alert the user
+  alert(`${product.name} added to the cart!`);
+
+  // Refresh the page to reflect the updated cart
+  setTimeout(() => {
+    location.reload();
+  }, 500); // Adds a small delay to ensure everything is saved
+}
+
+// ✅ Trigger "cartUpdated" event when removing from cart
+function removeFromCart(productId) {
+  const productIndex = cart.findIndex((item) => item.id === productId);
+
+  if (productIndex > -1) {
+    if (cart[productIndex].quantity > 1) {
+      cart[productIndex].quantity--;
+    } else {
+      cart.splice(productIndex, 1);
+    }
+  }
+
+  saveCart();
+  updateCartDisplay();
+  updateCartButton(); // ✅ Update the "Go to Cart" button immediately
+}
+
+
 // Cart functionality
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -113,7 +175,6 @@ function removeFromCart(productId) {
 }
 
 // Function to handle checkout
-// Function to handle checkout
 function handleCheckout() {
   const checkoutForm = document.getElementById("checkout-form");
   if (!checkoutForm) return;
@@ -122,7 +183,7 @@ function handleCheckout() {
   populateTimeOptions();
 
   let selectedLocation = "";
-  let selectedTime = "";
+  let selectedTimeText = ""; // Store the time button's text
 
   // Handle location selection
   document.querySelectorAll(".location-option").forEach((button) => {
@@ -133,11 +194,11 @@ function handleCheckout() {
     });
   });
 
-  // Handle time selection
+  // Handle time selection using the exact text from the button
   document.querySelectorAll(".time-option").forEach((button) => {
     button.addEventListener("click", (event) => {
       event.preventDefault();
-      selectedTime = button.getAttribute("data-time");
+      selectedTimeText = button.textContent.trim(); // Use the exact button text
       document.querySelectorAll(".time-option").forEach((btn) => btn.classList.remove("selected"));
       button.classList.add("selected");
     });
@@ -154,31 +215,33 @@ function handleCheckout() {
 
     const name = document.getElementById("name").value;
     const date = document.getElementById("date").value;
-    if (!date || !selectedTime) {
-      alert("Please select a valid date and time.");
+
+    // Validation for required fields
+    if (!name || !date || !selectedLocation || !selectedTimeText) {
+      let errorMessage = "Please fill out the following missing fields:\n";
+      if (!name) errorMessage += "- Name\n";
+      if (!selectedLocation) errorMessage += "- Location\n";
+      if (!date) errorMessage += "- Date\n";
+      if (!selectedTimeText) errorMessage += "- Time\n";
+
+      alert(errorMessage);
       return;
     }
 
     const now = new Date();
-    const selectedDateTime = new Date(`${date} ${selectedTime.split(" / ")[0]}`);
+    const selectedDateTime = new Date(`${date} ${selectedTimeText.split(" / ")[0]}`);
 
-    // ✅ Prevent weekend orders
+    // Prevent weekend orders
     const dayOfWeek = selectedDateTime.getDay();
     if (dayOfWeek === 0 || dayOfWeek === 6) {
       alert("Orders cannot be placed on weekends. Please select a weekday.");
       return;
     }
 
-    // ✅ Ensure the selected date and time is at least 1 hour in the future
+    // Ensure the selected date and time is at least 1 hour in the future
     const timeDifference = selectedDateTime - now;
     if (timeDifference < 3600000) {
       alert("Please select a time that is at least 1 hour in the future.");
-      return;
-    }
-
-    // Ensure required fields are filled
-    if (!name || !selectedLocation || !selectedTime) {
-      alert(`Please fill out the following missing fields:\n${!name ? '- Name\n' : ''}${!selectedLocation ? '- Location\n' : ''}${!selectedTime ? '- Time\n' : ''}`);
       return;
     }
 
@@ -186,7 +249,7 @@ function handleCheckout() {
     sessionStorage.setItem("checkoutCart", JSON.stringify(cart));
     sessionStorage.setItem("orderName", name);
     sessionStorage.setItem("orderLocation", selectedLocation);
-    sessionStorage.setItem("orderTime", formatTime(selectedTime, date));
+sessionStorage.setItem("orderTime", selectedTimeText.replace(" / ", " - "));
     sessionStorage.setItem("orderDate", date);
 
     // Redirect to checkout summary
@@ -220,7 +283,7 @@ function populateTimeOptions() {
     const button = document.createElement("button");
     button.classList.add("time-option");
     button.textContent = time;
-    button.dataset.time = time;
+    button.dataset.time = time; // Store the exact text
     timeContainer.appendChild(button);
   });
 }
@@ -244,6 +307,10 @@ function restrictWeekendDates() {
 // Save cart to localStorage
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
+
+  // Dispatch custom event to update the UI
+  const cartUpdatedEvent = new Event("cartUpdated");
+  document.dispatchEvent(cartUpdatedEvent);
 }
 
 // Load form data from localStorage
@@ -284,6 +351,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("cart-items")) updateCartDisplay();
   if (document.getElementById("checkout-form")) handleCheckout();
   if (document.getElementById("order-summary")) loadCheckoutSummary();
+  updateCartButton(); // ✅ Update the button on page load
 });
 
 // Google Sheets API Integration for Stock Tracking
@@ -360,3 +428,4 @@ function updateProductStock(sheetData) {
 
 // Call the loadStockData function on page load
 document.addEventListener('DOMContentLoaded', loadStockData);
+document.addEventListener("cartUpdated", updateCartButton);

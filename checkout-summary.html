@@ -142,8 +142,8 @@
       document.getElementById("order-time").textContent = orderTime;
       document.getElementById("total-price").textContent = total.toFixed(2);
 
-      // Update Email Subject
-      document.getElementById("order-date-time").textContent = `${orderDate} at ${orderTime}`;
+      // ✅ Update Email Subject to match the time button text
+      document.getElementById("order-date-time").textContent = `${orderDate} - ${orderTime}`;
     }
 
     document.addEventListener("DOMContentLoaded", loadCheckoutSummary);
