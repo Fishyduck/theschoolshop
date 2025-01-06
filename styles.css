@@ -125,9 +125,9 @@ header h1 {
   .nav-bar {
     display: flex;
     flex-direction: row;
-    justify-content: space-around; /* Distribute buttons evenly */
+    justify-content: space-around;
     width: 100%;
-    padding: 10px 0;
+    padding: 8px 0;
     background-color: #2d89ef;
     border-radius: 0;
   }
@@ -135,7 +135,7 @@ header h1 {
   .nav-bar li {
     flex-grow: 1;
     text-align: center;
-    margin: 0 8px; /* Add space between buttons */
+    margin: 0 5px; /* ✅ Space between buttons */
   }
 
   .nav-bar a {
@@ -145,19 +145,13 @@ header h1 {
     font-size: 16px;
     border-radius: 5px;
     background-color: #2d89ef;
-    text-align: center;
     color: white;
+    text-align: center;
     transition: background-color 0.3s ease;
   }
 
   .nav-bar a:hover {
     background-color: #1d6bc1;
-  }
-
-  /* ✅ Adjust Header for Mobile */
-  header {
-    flex-direction: column;
-    padding-bottom: 10px;
   }
 }
 
