@@ -85,12 +85,12 @@ header h1 {
   margin: 0;
 }
 
-/* ✅ Navigation Bar Styling (Desktop) */
+/* ✅ Navigation Bar Styling */
 .nav-bar {
   display: flex;
   justify-content: space-evenly;
   background-color: #2d89ef;
-  padding: 10px;
+  padding: 8px 0;
   border-radius: 5px;
 }
 
@@ -104,9 +104,8 @@ header h1 {
   padding: 10px 15px;
   border-radius: 5px;
   background-color: #2d89ef;
-  transition: background-color 0.3s ease;
-  display: inline-block;
   text-align: center;
+  transition: background-color 0.3s ease;
 }
 
 /* ✅ Hover Effect */
@@ -114,25 +113,22 @@ header h1 {
   background-color: #1d6bc1;
 }
 
-/* ✅ Mobile Navigation Bar Styling (Horizontal Layout on Mobile) */
+/* ✅ Mobile Navigation Bar (Horizontal Layout) */
 @media (max-width: 768px) {
   .nav-bar {
     flex-direction: row; /* Horizontal layout */
-    flex-wrap: nowrap;
-    justify-content: space-between;
+    justify-content: space-around;
     width: 100%;
-    padding: 8px 0;
   }
 
   .nav-bar li {
-    flex: 1;
+    flex-grow: 1;
     text-align: center;
   }
 
   .nav-bar a {
-    width: 100%;
-    padding: 12px 0;
-    font-size: 14px;
+    display: block;
+    padding: 10px 0;
   }
 }
 
