@@ -98,32 +98,25 @@ header h1 {
 /* ✅ Navigation Bar Styling */
 .nav-bar {
   display: flex;
-  justify-content: space-around;
-  align-items: center;
+  gap: 15px;
   background-color: #2d89ef;
   padding: 10px;
   border-radius: 5px;
-  white-space: nowrap;
-}
-
-.nav-bar ul {
-  display: flex;
-  padding: 0;
-  margin: 0;
-  list-style: none;
 }
 
 .nav-bar li {
-  margin: 0 10px;
+  list-style: none;
 }
 
 .nav-bar a {
   color: white;
   text-decoration: none;
-  padding: 10px 15px;
+  padding: 8px 12px;
   border-radius: 5px;
   background-color: #2d89ef;
   transition: background-color 0.3s ease;
+  text-align: center;
+  display: inline-block; /* ✅ Ensure buttons wrap around text */
 }
 
 /* ✅ Hover Effect */
@@ -131,25 +124,25 @@ header h1 {
   background-color: #1d6bc1;
 }
 
-/* ✅ Mobile Adjustments for Navigation Bar */
+/* ✅ Mobile Adjustments */
 @media (max-width: 768px) {
   .nav-bar {
+    flex-direction: column;
+    align-items: flex-start; /* ✅ Align items to the left */
+    gap: 10px;
     padding: 8px;
-    flex-wrap: wrap;
-    justify-content: space-between;
   }
 
   .nav-bar li {
-    flex: 1 1 45%; /* Buttons take up 45% of the width on mobile for better spacing */
-    margin-bottom: 10px;
+    width: auto; /* ✅ Remove any auto-stretching */
   }
 
   .nav-bar a {
-    padding: 12px;
-    font-size: 16px;
-    text-align: center;
+    font-size: 14px;
+    width: fit-content; /* ✅ Fit buttons to the text width */
   }
 }
+
 
 /* Hero Section */
 .hero {
