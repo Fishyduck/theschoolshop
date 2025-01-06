@@ -88,13 +88,13 @@ header h1 {
 /* Navigation Bar Styling */
 .nav-bar {
   display: flex;
-  gap: 15px;
+  gap: 10px;
   background-color: #2d89ef;
-  padding: 8px 10px; /* Adjust padding to move buttons closer to the left */
+  padding: 8px 12px;
   border-radius: 5px;
-  margin-left: -5px; /* ✅ Slight offset to the left */
 }
 
+/* ✅ Consistent left alignment on all pages */
 .nav-bar li {
   list-style: none;
 }
@@ -106,6 +106,8 @@ header h1 {
   border-radius: 5px;
   background-color: #2d89ef;
   transition: background-color 0.3s ease;
+  display: inline-block;
+  width: calc(100% - 20px); /* ✅ Ensure buttons are consistently spaced on mobile */
 }
 
 /* Hover Effect */
@@ -117,13 +119,15 @@ header h1 {
 @media (max-width: 768px) {
   .nav-bar {
     flex-direction: column;
-    gap: 10px;
-    padding: 8px 10px; /* Ensure padding is consistent on mobile */
-    margin-left: -5px; /* ✅ Consistent left alignment */
+    gap: 8px;
+    padding: 8px 10px;
   }
 
   .nav-bar a {
     font-size: 14px;
+    width: calc(100% - 20px); /* ✅ Consistent width across all pages */
+    text-align: left; /* Align text to the left */
+    padding: 10px 15px; /* Ensure proper padding */
   }
 }
 
