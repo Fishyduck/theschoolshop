@@ -106,6 +106,7 @@ header h1 {
   background-color: #2d89ef;
   transition: background-color 0.3s ease;
   display: inline-block;
+  text-align: center;
 }
 
 /* ✅ Hover Effect */
@@ -117,8 +118,7 @@ header h1 {
 @media (max-width: 768px) {
   .nav-bar {
     flex-direction: row;
-    justify-content: space-between;
-    padding: 10px 0;
+    justify-content: space-around;
     width: 100%;
   }
 
@@ -133,6 +133,7 @@ header h1 {
     font-size: 14px;
   }
 }
+
 
 /* Hero Section */
 .hero {
