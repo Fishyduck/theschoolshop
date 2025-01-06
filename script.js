@@ -240,10 +240,10 @@ if (dayOfWeek === 0 || dayOfWeek === 6) {
 }
 
 
-    // Ensure the selected date and time is at least 1 hour in the future
+    // Ensure the selected date and time is at least 10 minutes in the future
     const timeDifference = selectedDateTime - now;
-    if (timeDifference < 3600000) {
-      alert("Please select a time that is at least 1 hour in the future.");
+   if (timeDifference < 600000) { // 600,000 milliseconds = 10 minutes
+      alert("Please select a time that is at least 10 minutes from now.");
       return;
     }
 
@@ -434,47 +434,32 @@ document.addEventListener("cartUpdated", updateCartButton);
 
 // ✅ Function to load shop status from Google Sheets
 async function loadShopStatus() {
-  const SHEET_ID = '13DiBvVe-jNM_o2CjdZXm34jLS0konxycmssb4BKpx8k';
-  const SHEET_NAME = 'Sheet1';
-  const API_KEY = 'AIzaSyDqd1fC7NRMLVMDHMvhNtZC5O8rJqjNNeE';
-
   try {
-    const response = await fetch(
-      `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}!H2?key=${API_KEY}`
-    );
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch status from Google Sheets');
-    }
-
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Sheet1!H2?key=${API_KEY}`;
+    const response = await fetch(url);
     const data = await response.json();
-    const statusValue = data.values ? data.values[0][0] : 'Loading...';
 
-    // ✅ Map numeric status to text
-    let statusText;
-    switch (statusValue) {
-      case '1':
-        statusText = 'Present';
-        break;
-      case '2':
-        statusText = 'Absent';
-        break;
-      default:
-        statusText = 'Unknown';
-    }
+    if (data.values && data.values[0] && data.values[0][0]) {
+      const statusValue = data.values[0][0];
+      const statusElement = document.getElementById("shop-status");
 
-    // ✅ Update the status on the page
-    const statusElement = document.getElementById('shop-status');
-    if (statusElement) {
-      statusElement.textContent = statusText;
+      if (statusValue === "1") {
+        statusElement.textContent = "Present";
+        statusElement.className = "present";
+      } else if (statusValue === "2") {
+        statusElement.textContent = "Absent";
+        statusElement.className = "absent";
+      } else {
+        statusElement.textContent = "Unknown";
+        statusElement.className = "";
+      }
     } else {
-      console.error('Shop status element not found in the DOM');
+      document.getElementById("shop-status").textContent = "Unknown";
     }
   } catch (error) {
-    console.error('Error loading shop status:', error);
-    document.getElementById('shop-status').textContent = 'Error';
+    console.error("Error loading shop status:", error);
+    document.getElementById("shop-status").textContent = "Error";
   }
 }
 
-// ✅ Call the function on page load
-document.addEventListener('DOMContentLoaded', loadShopStatus);
+document.addEventListener("DOMContentLoaded", loadShopStatus);

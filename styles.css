@@ -1,23 +1,36 @@
-/* Status Section Styling */
+/* ✅ Shop Status Section Styling */
 #status-section {
-  background-color: #f1f1f1;
-  padding: 15px 20px;
+  font-size: 0.9rem;
+  padding: 10px 20px;
+  border-radius: 50px;
+  display: inline-block;
+  margin-left: auto;
+  background-color: #28a745; /* Default Green */
+  color: #fff;
+  transition: background-color 0.3s ease-in-out;
   text-align: center;
-  border-radius: 8px;
-  margin: 10px auto;
-  max-width: 250px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-#status-section h2 {
-  color: #333;
-  font-size: 1.5rem;
+/* ✅ Change Entire Background Color Based on Status */
+#status-section.present {
+  background-color: #28a745; /* Green for Present */
 }
 
-#shop-status {
-  font-weight: bold;
-  color: #007bff;
+#status-section.absent {
+  background-color: #dc3545; /* Red for Absent */
 }
+
+/* ✅ Mobile adjustments for status section */
+@media (max-width: 768px) {
+  #status-section {
+    margin-top: 10px;
+    margin-left: 0;
+    align-self: flex-end;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+}
+
 
 /* Tips Section Styling */
 .tips-section {
