@@ -127,7 +127,7 @@ header h1 {
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
-    padding: 10px 0;
+    padding: 12px 0; /* Adjust padding for better spacing */
     background-color: #2d89ef;
     border-radius: 0;
   }
@@ -135,17 +135,20 @@ header h1 {
   .nav-bar li {
     flex-grow: 1;
     text-align: center;
+    margin: 0 5px; /* Add margin to prevent buttons from smooshing */
   }
 
   .nav-bar a {
     display: inline-block;
     width: 100%;
     padding: 10px 0;
+    font-size: 16px;
   }
 
   /* ✅ Adjust Header for Mobile */
   header {
     flex-direction: column;
+    padding-bottom: 8px;
   }
 }
 
