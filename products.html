@@ -7,7 +7,8 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
+<header>
+  <div class="header-container">
     <h1>The School Shop</h1>
     <nav>
       <ul class="nav-bar">
@@ -16,7 +17,13 @@
         <li><a href="cart.html">Cart</a></li>
       </ul>
     </nav>
-  </header>
+    <!-- ✅ Status Section -->
+    <section id="status-section">
+      <span id="shop-status">Loading...</span>
+    </section>
+  </div>
+</header>
+
 <main>
   <h2>Our Products</h2>
   <div id="products" class="product-list"></div>
@@ -25,9 +32,10 @@
   <div id="cart-button-container"></div>
 </main>
 
-  <footer>
-    <p>&copy; 2024 The School Shop. All rights reserved.</p>
-  </footer>
-  <script src="script.js"></script>
+<footer>
+  <p>&copy; 2024 The School Shop. All rights reserved.</p>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
