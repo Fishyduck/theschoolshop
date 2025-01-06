@@ -431,3 +431,50 @@ function updateProductStock(sheetData) {
 // Call the loadStockData function on page load
 document.addEventListener('DOMContentLoaded', loadStockData);
 document.addEventListener("cartUpdated", updateCartButton);
+
+// ✅ Function to load shop status from Google Sheets
+async function loadShopStatus() {
+  const SHEET_ID = '13DiBvVe-jNM_o2CjdZXm34jLS0konxycmssb4BKpx8k';
+  const SHEET_NAME = 'Sheet1';
+  const API_KEY = 'AIzaSyDqd1fC7NRMLVMDHMvhNtZC5O8rJqjNNeE';
+
+  try {
+    const response = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}!H2?key=${API_KEY}`
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch status from Google Sheets');
+    }
+
+    const data = await response.json();
+    const statusValue = data.values ? data.values[0][0] : 'Loading...';
+
+    // ✅ Map numeric status to text
+    let statusText;
+    switch (statusValue) {
+      case '1':
+        statusText = 'Present';
+        break;
+      case '2':
+        statusText = 'Absent';
+        break;
+      default:
+        statusText = 'Unknown';
+    }
+
+    // ✅ Update the status on the page
+    const statusElement = document.getElementById('shop-status');
+    if (statusElement) {
+      statusElement.textContent = statusText;
+    } else {
+      console.error('Shop status element not found in the DOM');
+    }
+  } catch (error) {
+    console.error('Error loading shop status:', error);
+    document.getElementById('shop-status').textContent = 'Error';
+  }
+}
+
+// ✅ Call the function on page load
+document.addEventListener('DOMContentLoaded', loadShopStatus);
