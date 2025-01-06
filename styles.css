@@ -85,7 +85,7 @@ header h1 {
   margin: 0;
 }
 
-/* ✅ Navigation Bar Styling */
+/* ✅ Desktop Navigation Bar Styling */
 .nav-bar {
   display: flex;
   justify-content: space-evenly;
@@ -108,17 +108,21 @@ header h1 {
   transition: background-color 0.3s ease;
 }
 
-/* ✅ Hover Effect */
+/* ✅ Hover Effect for Desktop */
 .nav-bar a:hover {
   background-color: #1d6bc1;
 }
 
-/* ✅ Mobile Navigation Bar (Horizontal Layout) */
+/* ✅ Mobile Navigation Bar Styling */
 @media (max-width: 768px) {
   .nav-bar {
-    flex-direction: row; /* Horizontal layout */
-    justify-content: space-around;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     width: 100%;
+    padding: 10px 0;
+    background-color: #2d89ef;
+    border-radius: 0;
   }
 
   .nav-bar li {
@@ -127,8 +131,14 @@ header h1 {
   }
 
   .nav-bar a {
-    display: block;
+    display: inline-block;
+    width: 100%;
     padding: 10px 0;
+  }
+
+  /* ✅ Adjust Header for Mobile */
+  header {
+    flex-direction: column;
   }
 }
 

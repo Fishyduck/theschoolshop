@@ -8,14 +8,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap">
 
-  <!-- ✅ Internal CSS for Navigation Styling -->
+  <!-- ✅ Internal CSS for Mobile Navigation Bar Styling -->
   <style>
-    /* ✅ Navigation Bar Styling */
+    /* ✅ Desktop Navigation Bar Styling */
     .nav-bar {
       display: flex;
-      gap: 15px;
+      justify-content: space-evenly;
       background-color: #2d89ef;
-      padding: 10px;
+      padding: 8px 0;
       border-radius: 5px;
     }
 
@@ -26,35 +26,44 @@
     .nav-bar a {
       color: white;
       text-decoration: none;
-      padding: 8px 12px;
+      padding: 10px 15px;
       border-radius: 5px;
       background-color: #2d89ef;
-      transition: background-color 0.3s ease;
       text-align: center;
-      display: inline-block; /* ✅ Ensure buttons wrap around text */
+      transition: background-color 0.3s ease;
     }
 
-    /* ✅ Hover Effect */
+    /* ✅ Hover Effect for Desktop */
     .nav-bar a:hover {
       background-color: #1d6bc1;
     }
 
-    /* ✅ Mobile Adjustments */
+    /* ✅ Mobile Navigation Bar (Horizontal Layout) */
     @media (max-width: 768px) {
       .nav-bar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-        padding: 8px;
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+        padding: 10px 0;
+        background-color: #2d89ef;
+        border-radius: 0;
       }
 
       .nav-bar li {
-        width: auto; /* ✅ Remove any auto-stretching */
+        flex-grow: 1;
+        text-align: center;
       }
 
       .nav-bar a {
+        display: inline-block;
+        padding: 10px 0;
+        width: 100%;
         font-size: 14px;
-        width: fit-content; /* ✅ Fit buttons to the text width */
+      }
+
+      /* ✅ Adjust Header for Mobile */
+      header {
+        flex-direction: column;
       }
     }
   </style>
