@@ -64,7 +64,7 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: ccccccccccc;
+  background-color: #ffffff; /* ✅ Ensure white background */
   color: #333;
   line-height: 1.6;
 }
@@ -114,12 +114,13 @@ header h1 {
 
 /* ✅ Mobile Navigation Bar (Horizontal Layout with Rounded Buttons) */
 @media (max-width: 768px) {
+  /* ✅ Horizontal layout for mobile */
   .nav-bar {
     display: flex;
-    flex-direction: row; /* ✅ Horizontal layout */
-    justify-content: space-between;
+    flex-direction: row;
+    justify-content: space-around;
     width: 100%;
-    padding: 8px 10px;
+    padding: 10px 0;
     border-radius: 12px; /* ✅ Softer edges for mobile nav bar */
     background-color: #231f20;
   }
@@ -142,6 +143,7 @@ header h1 {
     align-self: flex-start;
   }
 }
+
 
 /* Hero Section */
 .hero {
