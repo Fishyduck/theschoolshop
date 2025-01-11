@@ -64,7 +64,7 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f9f9f9;
+  background-color: ccccccccccc;
   color: #333;
   line-height: 1.6;
 }
@@ -75,8 +75,8 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-  background-color: #007bff;
-  color: white;
+  background-color: #ffca12;
+  color: gray;
 }
 
 header h1 {
@@ -88,7 +88,7 @@ header h1 {
 .nav-bar {
   display: flex;
   justify-content: space-around;
-  background-color: #2d89ef;
+  background-color: #231f20;
   padding: 10px;
   border-radius: 5px;
   margin: 0;
@@ -99,27 +99,29 @@ header h1 {
 }
 
 .nav-bar a {
+  display: inline-block;
+  padding: 5px 5px;
+  background-color: #231f20;
   color: white;
   text-decoration: none;
-  padding: 10px 15px;
   border-radius: 5px;
-  background-color: #2d89ef;
-  text-align: center;
   transition: background-color 0.3s ease;
-  width: 100%;
 }
 
-/* ✅ Hover Effect */
 .nav-bar a:hover {
-  background-color: #1d6bc1;
+  background-color: #946c1c;
 }
 
 /* ✅ Mobile Navigation Bar (Horizontal Layout) */
 @media (max-width: 768px) {
   .nav-bar {
+    display: flex;
     flex-direction: row;
     justify-content: space-around;
     width: 100%;
+    padding: 12px 0;
+    background-color: #231f20;
+    border-radius: 0;
   }
 
   .nav-bar li {
@@ -130,13 +132,14 @@ header h1 {
   .nav-bar a {
     display: inline-block;
     padding: 12px 0;
+    width: 100%;
   }
 }
 
 /* Hero Section */
 .hero {
   text-align: center;
-  background-color: #007bff;
+  background-color: #ffca12;
   color: white;
   padding: 80px 20px;
   margin: 0;
@@ -147,16 +150,22 @@ header h1 {
   margin: 0 0 20px 0;
 }
 
+.hero h2 {
+  font-size: 2.5rem;
+  color: #3c445e; /* Title color */
+  margin-bottom: 10px;
+}
+
 .hero p {
-  font-size: 1.25rem;
-  margin: 10px 0 20px;
+  font-size: 1.2rem;
+  color: #3c445e; /* Subtitle color */
 }
 
 .hero .btn {
   padding: 15px 30px;
   font-size: 1rem;
   font-weight: bold;
-  background-color: #0056b3;
+  background-color: #231f20;
   color: white;
   border: none;
   border-radius: 5px;
@@ -165,55 +174,75 @@ header h1 {
 }
 
 .hero .btn:hover {
-  background-color: #003f8c;
+  background-color: #946c1c;
 }
 
-/* Product Grid */
+/* ✅ Product List Grid Layout */
 .product-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
   padding: 20px;
 }
 
+/* ✅ Product Card Styling */
 .product-card {
-  background: white;
+  background-color: white;
   padding: 15px;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+  max-width: 100%; /* ✅ Ensure cards don't shrink */
+  height: 100%; /* ✅ Ensure equal card height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
+/* ✅ Ensure all product images are the same size */
 .product-card img {
-  max-width: 100%;
-  height: auto;
+  width: 100%;
+  max-width: 200px; /* ✅ Control max image size */
+  height: 200px; /* ✅ Fixed height for consistency */
+  object-fit: cover;
   border-radius: 5px;
+  margin: 0 auto;
 }
 
+/* ✅ Product Title Styling */
 .product-card h3 {
   font-size: 1.25rem;
   margin: 10px 0;
 }
 
+/* ✅ Product Description */
 .product-card p {
   font-size: 1rem;
   margin: 5px 0;
 }
 
+/* ✅ Product Button Styling (Redesigned) */
 .product-card button {
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
+  padding: 8px 16px;
+  background-color: #231f20;
+  color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 25px; /* ✅ More rounded button */
   cursor: pointer;
   font-size: 0.9rem;
+  margin-top: 12px;
+  width: fit-content; /* ✅ Ensure button is only as wide as its text */
+  align-self: center; /* ✅ Center the button */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* ✅ Subtle shadow for modern look */
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .product-card button:hover {
-  background-color: #0056b3;
+  background-color: #946c1c;
+  transform: scale(1.05); /* ✅ Slight grow effect on hover */
 }
+
 
 /* Cart Styling */
 .cart-container {
@@ -318,7 +347,7 @@ header h1 {
 /* Time Option Styling */
 .time-option {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #231f20;
   color: white;
   border: none;
   border-radius: 5px;
@@ -328,11 +357,11 @@ header h1 {
 }
 
 .time-option:hover {
-  background-color: #0056b3;
+  background-color: #946c1c;
 }
 
 .time-option.selected {
-  background-color: #0056b3;
+  background-color: #946c1c;
   color: #fff;
   font-weight: bold;
 }

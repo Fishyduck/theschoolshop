@@ -66,10 +66,10 @@ let cart = JSON.parse(localStorage.getItem("cart")) || [];
 // Function to display products on the products page
 function displayProducts() {
   const products = [
-    { id: 1, name: "Cool Ranch Doritos", price: 1.5, image: "images/doritos-cr.png" },
-    { id: 2, name: "Nacho Cheese Doritos", price: 1.5, image: "images/doritos-nc.png" },
-    { id: 3, name: "Cheeto Puffs", price: 1.5, image: "images/cheetos-p.png" },
-    { id: 4, name: "Cheetos", price: 1.5, image: "images/cheetos.png" }
+    { id: 1, name: "Cool Ranch Doritos", price: 1.5, image: "images/product-1.png" },
+    { id: 2, name: "Nacho Cheese Doritos", price: 1.5, image: "images/product-2.png" },
+    { id: 3, name: "Cheeto Puffs", price: 1.5, image: "images/product-3.png" },
+    { id: 4, name: "Cheetos", price: 1.5, image: "images/product-4.png" }
   ];
 
   const productContainer = document.getElementById("products");
@@ -191,7 +191,7 @@ function handleCheckout() {
     button.addEventListener("click", () => {
       selectedLocation = button.getAttribute("data-location");
       document.querySelectorAll(".location-option").forEach((btn) => btn.style.border = "none");
-      button.style.border = "2px solid #2d89ef";
+      button.style.border = "2px solid #ffca12";
     });
   });
 
