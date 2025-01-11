@@ -64,63 +64,47 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f9f9f9; /* ✅ Restore light gray background */
+  background-color: ccccccccccc;
   color: #333;
   line-height: 1.6;
-  min-height: 100vh;
 }
 
-/* ✅ General Header Styling */
+/* ✅ Header Styling */
 header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   padding: 15px 20px;
-  background-color: #ffca12; /* ✅ School shop yellow */
-  color: #333;
+  background-color: #ffca12;
+  color: gray;
 }
 
-/* ✅ Main Section Styling */
-main {
-  background-color: #ffffff; /* ✅ Keep main content white */
-  padding: 20px;
+header h1 {
+  font-size: 1.8rem;
+  margin: 0;
 }
 
-/* ✅ Footer Styling */
-footer {
-  background-color: #231f20; /* ✅ Dark background for footer */
-  color: white;
-  text-align: center;
-  padding: 15px 0;
-  box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2);
-  font-size: 0.9rem;
-  position: relative;
-  bottom: 0;
-  width: 100%;
-}
-
-/* ✅ Navigation Bar Styling (Desktop) */
+/* ✅ Navigation Bar Styling */
 .nav-bar {
   display: flex;
   justify-content: space-around;
   background-color: #231f20;
   padding: 10px;
-  border-radius: 12px; /* ✅ Softer button edges */
+  border-radius: 5px;
   margin: 0;
 }
 
-/* ✅ Navigation Links */
 .nav-bar li {
   list-style: none;
 }
 
 .nav-bar a {
   display: inline-block;
-  padding: 8px 12px;
+  padding: 5px 5px;
   background-color: #231f20;
   color: white;
   text-decoration: none;
-  border-radius: 8px; /* ✅ Softer button edges */
+  border-radius: 5px;
   transition: background-color 0.3s ease;
 }
 
@@ -130,24 +114,14 @@ footer {
 
 /* ✅ Mobile Navigation Bar (Horizontal Layout) */
 @media (max-width: 768px) {
-  /* ✅ Header Layout for Mobile */
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  header h1 {
-    text-align: left;
-    width: 100%;
-  }
-
   .nav-bar {
+    display: flex;
     flex-direction: row;
     justify-content: space-around;
     width: 100%;
-    padding: 8px 0;
-    border-radius: 12px; /* Softer edges */
+    padding: 12px 0;
     background-color: #231f20;
+    border-radius: 0;
   }
 
   .nav-bar li {
@@ -157,18 +131,10 @@ footer {
 
   .nav-bar a {
     display: inline-block;
-    padding: 10px 0;
-    border-radius: 8px; /* Softer button edges */
-    font-size: 14px;
-  }
-
-  /* ✅ Status Button Position on Mobile */
-  #status-section {
-    margin-top: 8px;
-    align-self: flex-start;
+    padding: 12px 0;
+    width: 100%;
   }
 }
-
 
 /* Hero Section */
 .hero {
@@ -402,8 +368,8 @@ footer {
 
 /* Footer */
 footer {
-  background-color: #ffffff; /* ✅ Ensure white background */
-  color: #333;
+  background-color: #333;
+  color: white;
   text-align: center;
   padding: 15px 0;
   box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2);
@@ -445,9 +411,39 @@ footer {
   background-color: #218838;
 }
 
-/* ✅ Utility Fix */
-* {
-  background-color: transparent;
-  box-shadow: none;
+/* ✅ Mobile Layout Adjustments */
+@media (max-width: 768px) {
+  /* Adjust header for mobile */
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  /* Adjust navigation bar for mobile */
+  .nav-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-bar li {
+    margin: 5px 0;
+  }
+
+  /* Product grid layout for mobile */
+  .product-list {
+    grid-template-columns: 1fr;
+  }
+
+  /* Adjust "Go to Cart" button size for mobile */
+  #go-to-cart {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    bottom: 10px;
+    right: 10px;
+  }
 }
 
