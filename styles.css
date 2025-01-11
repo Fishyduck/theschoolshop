@@ -64,27 +64,11 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #ffffff; /* ✅ Ensure white background */
+  background-color: #f9f9f9; /* ✅ Restore light gray background */
   color: #333;
   line-height: 1.6;
   min-height: 100vh;
 }
-
-main {
-  background-color: #ffffff; /* ✅ Ensure white background */
-  padding: 20px;
-}
-
-footer {
-  background-color: #ffffff; /* ✅ Ensure footer background is white */
-  padding: 15px;
-  text-align: center
-}
-
-/* ✅ Utility Fix to Remove Unwanted Background Colors */
-* {
-  background-color: transparent !important;
-  box-shadow: none !important;
 
 /* ✅ General Header Styling */
 header {
@@ -92,14 +76,27 @@ header {
   align-items: center;
   justify-content: space-between;
   padding: 15px 20px;
-  background-color: #ffca12;
-  color: #333; /* ✅ Use consistent text color */
+  background-color: #ffca12; /* ✅ School shop yellow */
+  color: #333;
 }
 
-/* ✅ Header Title Styling */
-header h1 {
-  font-size: 1.8rem;
-  margin: 0;
+/* ✅ Main Section Styling */
+main {
+  background-color: #ffffff; /* ✅ Keep main content white */
+  padding: 20px;
+}
+
+/* ✅ Footer Styling */
+footer {
+  background-color: #231f20; /* ✅ Dark background for footer */
+  color: white;
+  text-align: center;
+  padding: 15px 0;
+  box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2);
+  font-size: 0.9rem;
+  position: relative;
+  bottom: 0;
+  width: 100%;
 }
 
 /* ✅ Navigation Bar Styling (Desktop) */
