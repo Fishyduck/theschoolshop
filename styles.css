@@ -121,7 +121,7 @@ header h1 {
     width: 100%;
     padding: 8px 0;
     border-radius: 12px; /* ✅ Softer edges */
-    background-color: #2d89ef;
+    background-color: #231f20;
   }
 
   .nav-bar li {
@@ -411,40 +411,3 @@ footer {
 #go-to-cart:hover {
   background-color: #218838;
 }
-
-/* ✅ Mobile Layout Adjustments */
-@media (max-width: 768px) {
-  /* Adjust header for mobile */
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  header h1 {
-    font-size: 1.5rem;
-  }
-
-  /* Adjust navigation bar for mobile */
-  .nav-bar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .nav-bar li {
-    margin: 5px 0;
-  }
-
-  /* Product grid layout for mobile */
-  .product-list {
-    grid-template-columns: 1fr;
-  }
-
-  /* Adjust "Go to Cart" button size for mobile */
-  #go-to-cart {
-    padding: 10px 16px;
-    font-size: 0.9rem;
-    bottom: 10px;
-    right: 10px;
-  }
-}
-
