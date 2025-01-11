@@ -119,9 +119,9 @@ header h1 {
     flex-direction: row;
     justify-content: space-around;
     width: 100%;
-    padding: 12px 0;
-    background-color: #231f20;
-    border-radius: 0;
+    padding: 8px 0;
+    border-radius: 12px; /* ✅ Softer edges */
+    background-color: #2d89ef;
   }
 
   .nav-bar li {
@@ -131,8 +131,9 @@ header h1 {
 
   .nav-bar a {
     display: inline-block;
-    padding: 12px 0;
-    width: 100%;
+    padding: 10px 0;
+    border-radius: 8px; /* ✅ Softer button edges */
+    font-size: 14px;
   }
 }
 
