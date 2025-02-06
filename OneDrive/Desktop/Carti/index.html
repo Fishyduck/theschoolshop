@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playboi Carti Discography & Information</title>
+  <style>
+    /* General Page Styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #eee;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    a {
+      color: #88f;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    header {
+      background-color: #1e1e1e;
+      padding: 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0 0;
+      text-align: center;
+    }
+    nav ul li {
+      display: inline-block;
+      margin: 0 10px;
+    }
+    nav ul li a {
+      color: #eee;
+      font-weight: bold;
+    }
+    section {
+      padding: 20px;
+      margin: 10px;
+      text-align: center;
+    }
+    h2 {
+      border-bottom: 2px solid #333;
+      padding-bottom: 5px;
+    }
+    /* Collapsible Section Styles */
+    .collapsible {
+      background-color: #333;
+      color: white;
+      cursor: pointer;
+      padding: 10px;
+      width: 90%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 1.2em;
+      margin: 10px auto;
+      border-radius: 5px;
+    }
+    .active, .collapsible:hover {
+      background-color: #555;
+    }
+    .content {
+      padding: 0 18px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.25s ease-out;
+      background-color: #1e1e1e;
+      margin: 0 5%;
+      border-radius: 0 0 5px 5px;
+    }
+    .content ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .content li {
+      padding: 5px 0;
+    }
+    /* Tables for Discography */
+    table.discography-table {
+      width: 90%;
+      margin: 10px auto;
+      border-collapse: collapse;
+    }
+    table.discography-table th, table.discography-table td {
+      border: 1px solid #555;
+      padding: 8px;
+      text-align: center;
+    }
+    table.discography-table th {
+      background-color: #333;
+    }
+    /* Additional Section for Wikipedia Data */
+    #wikipedia-data {
+      text-align: left;
+      margin: 20px auto;
+      max-width: 90%;
+    }
+    #wikipedia-data pre {
+      background-color: #1e1e1e;
+      border: 1px solid #333;
+      padding: 15px;
+      border-radius: 5px;
+      max-height: 500px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+    /* Footer */
+    footer {
+      background-color: #1e1e1e;
+      text-align: center;
+      padding: 10px;
+      font-size: 0.8em;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header & Navigation -->
+  <header>
+    <h1>Playboi Carti Discography & Information</h1>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#breathTracker">Breath Tracker</a></li>
+        <li><a href="#discography">Discography</a></li>
+        <li><a href="#info">More Info</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Home Section -->
+  <section id="home">
+    <h2>Welcome</h2>
+    <p>
+      This site is a one‑stop resource for everything related to Playboi Carti’s musical output and career. From his earliest mixtapes under the alias <strong>$ir Cartier</strong> to his latest singles and upcoming projects, you’ll find comprehensive discography data along with a real‑time breath tracker (a fun nod to the artist’s unique persona) and detailed background information.
+    </p>
+  </section>
+
+  <!-- Real-Time Breath Tracker Section -->
+  <section id="breathTracker">
+    <h2>Estimated Breaths Taken by Playboi Carti</h2>
+    <p id="breathCount" style="font-size: 2em;">Loading...</p>
+  </section>
+
+  <!-- Discography Section with Collapsible Subsections -->
+  <section id="discography">
+    <h2>Discography</h2>
+    <!-- Studio Albums -->
+    <button class="collapsible">Studio Albums</button>
+    <div class="content">
+      <table class="discography-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Release Date</th>
+            <th>Label</th>
+            <th>Chart Peak (US)</th>
+            <th>Certifications</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="dielit.html">Die Lit</a></td>
+            <td>May 11, 2018</td>
+            <td>AWGE, Interscope</td>
+            <td>#3</td>
+            <td>Gold (RIAA)</td>
+          </tr>
+          <tr>
+            <td><a href="wholelottared.html">Whole Lotta Red</a></td>
+            <td>December 25, 2020</td>
+            <td>AWGE, Interscope</td>
+            <td>#1</td>
+            <td>Gold (RIAA)</td>
+          </tr>
+          <tr>
+            <td><a href="iammusic.html">I Am Music</a></td>
+            <td>TBA</td>
+            <td>AWGE, Interscope</td>
+            <td>–</td>
+            <td>–</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Mixtapes -->
+    <button class="collapsible">Mixtapes</button>
+    <div class="content">
+      <table class="discography-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Release Date</th>
+            <th>Alias</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="thc.html">THC: The High Chronical</a></td>
+            <td>November 5, 2011</td>
+            <td>$ir Cartier</td>
+          </tr>
+          <tr>
+            <td><a href="youngmisfit.html">Young Misfit</a></td>
+            <td>November 12, 2012</td>
+            <td>$ir Cartier</td>
+          </tr>
+          <tr>
+            <td><a href="sensation.html">Sensation</a></td>
+            <td>July 15, 2013</td>
+            <td>$ir Cartier</td>
+          </tr>
+          <tr>
+            <td><a href="playboicarti.html">Playboi Carti</a></td>
+            <td>April 14, 2017</td>
+            <td>Playboi Carti</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Extended Plays (EPs) -->
+    <button class="collapsible">Extended Plays (EPs)</button>
+    <div class="content">
+      <table class="discography-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Release Date</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="deathintune.html">Death in Tune</a></td>
+            <td>May 13, 2015</td>
+            <td>Self‑released</td>
+          </tr>
+          <tr>
+            <td><a href="playboifresh.html">PlayboiFresh (with Chris Fresh)</a></td>
+            <td>February 11, 2016</td>
+            <td>Self‑released</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Singles (As Lead Artist) -->
+    <button class="collapsible">Singles (As Lead Artist)</button>
+    <div class="content">
+      <ul>
+        <li>"3 Chains" (with Rich the Kid, 2016) – Non‑album single</li>
+        <li>"No Pressure" (with Rich the Kid)</li>
+        <li>"Word to Yams"</li>
+        <li>"Broke Boi" (2017)</li>
+        <li>"Lookin" (featuring Lil Uzi Vert) – RIAA: Gold</li>
+        <li>"wokeuplikethis" (featuring Lil Uzi Vert) – 2× Platinum, BPI: Silver, MC: Gold</li>
+        <li>"Magnolia" (2017) – 3× Platinum, AFP: Gold, BPI: Gold, MC: 2× Platinum</li>
+        <li>"Let It Go"</li>
+        <li>"Crumbs" (with DRAM) – Non‑album single</li>
+        <li>"In the Lobby" (with Sosamann, 2018)</li>
+        <li>"All of Them" (with Rich the Kid)</li>
+        <li>"@ Meh" (2020)</li>
+        <li>"Miss the Rage" (with Trippie Redd, 2021) – Platinum, BPI: Silver, MC: Gold</li>
+        <li>"Popular" (with the Weeknd and Madonna, 2023) – Platinum, AFP: Platinum, ARIA: 3× Platinum, BPI: Platinum, SNEP: Gold</li>
+        <li>"Type Shit" (with Future, Metro Boomin, and Travis Scott, 2024)</li>
+        <li>"All Red" (I Am Music)</li>
+        <li>"Timeless" (with the Weeknd)</li>
+        <li>"Hurry Up Tomorrow"</li>
+        <!-- More singles can be added as needed -->
+      </ul>
+    </div>
+    
+    <!-- Guest Appearances -->
+    <button class="collapsible">Guest Appearances</button>
+    <div class="content">
+      <ul>
+        <li>"Action" (Joey Fatts featuring Playboi Carti and ASAP Nast, 2016)</li>
+        <li>"Telephone Calls" (ASAP Mob featuring ASAP Rocky, Tyler, the Creator, Playboi Carti, and Yung Gleesh) – RIAA: Gold</li>
+        <li>"Raf" (ASAP Mob featuring Playboi Carti, ASAP Rocky, Quavo, Lil Uzi Vert, and Frank Ocean, 2017) – Platinum, ARIA: Gold</li>
+        <li>"Summer Bummer" (Lana Del Rey featuring ASAP Rocky, Playboi Carti, and MC Papu and liljoelnibbawigga) – Gold</li>
+        <!-- More guest appearances... -->
+      </ul>
+    </div>
+    
+    <!-- Music Videos -->
+    <button class="collapsible">Music Videos</button>
+    <div class="content">
+      <ul>
+        <li>"Fetti" (with Dash and Maxo Kream, 2015) – Directed by Bird Medina</li>
+        <li>"Talk" (directed by Quinton Dominguez)</li>
+        <li>"Talk (ICYTWAT Remix)" (directed by Nassacre)</li>
+        <li>"Broke Boi" (directed by InTheSkyWDMDS and Nef Film)</li>
+        <li>"What" (with UnoTheActivist, 2016) – AWGE</li>
+        <li>"Magnolia" (2017) – Directed by Hidji Films</li>
+        <li>"wokeuplikethis" (featuring Lil Uzi Vert) – Directed by James "JMP" Pereira</li>
+        <li>"New Choppa" (featuring ASAP Rocky) – Director Unknown</li>
+        <li>"R.I.P." (2018) – Co‑directed by Playboi Carti and Nick Walker</li>
+        <li>"@ Meh" (2020)</li>
+        <li>"M3tamorphosis" (featuring Kid Cudi) – Directed by Nico Ballesteros</li>
+        <li>"Sky" (2021) – Directed by Nick Walker</li>
+        <li>"Different Day" (2023) – Directed by Yung Tacc</li>
+        <!-- Additional music videos can be listed -->
+      </ul>
+    </div>
+  </section>
+  
+  <!-- Additional Information Section -->
+  <section id="info">
+    <h2>Additional Information & Wikipedia Data</h2>
+    <div style="background-color: #1e1e1e; margin: 0 5%; padding: 15px; border-radius: 5px; text-align: left;">
+      <h3>Overview</h3>
+      <p>
+        The discography of American rapper Playboi Carti includes two studio albums, one collaborative EP, four mixtapes, one extended play, one promotional single, and numerous singles (both as a lead and as a featured artist). Under his early alias <strong>$ir Cartier</strong>, he self‑released mixtapes that laid the foundation for his distinctive, experimental sound.
+      </p>
+      <h3>Career Highlights</h3>
+      <p>
+        Carti broke into the mainstream with his self‑titled 2017 mixtape – featuring hits like “Magnolia” and “wokeuplikethis*” – which peaked at number 12 on the US Billboard 200. His debut studio album <em>Die Lit</em> (2018) debuted at number 3 on the Billboard 200, while his sophomore album <em>Whole Lotta Red</em> (2020) debuted at number one. Collaborations with artists such as Kanye West, Trippie Redd, and Lil Uzi Vert have further solidified his status in the hip‑hop scene.
+      </p>
+      <h3>Chart Success & Certifications</h3>
+      <p>
+        Both studio albums have garnered significant commercial success and certification from organizations like the RIAA and BPI. Notable singles like “Magnolia” have achieved multi‑platinum status.
+      </p>
+      <h3>Future Projects</h3>
+      <p>
+        Fans eagerly await Carti’s third studio album, tentatively titled <em>I Am Music</em>, as he continues to innovate and influence the trap and hip‑hop genres.
+      </p>
+      <h3>Wikipedia Discography Data</h3>
+      <details>
+        <summary>Show Full Wikipedia Discography Information</summary>
+        <pre style="white-space: pre-wrap;">
+Playboi Carti discography
+
+Playboi Carti performing in 2024
+Studio albums    2
+EPs    1
+Singles    28
+Mixtapes    4
+Collaborative EP    1
+Promotional singles    1
+Music videos    18
+
+The discography of American rapper Playboi Carti consists of two studio albums, two extended plays (EPs), four mixtapes, one promotional single, and 27 singles (including 11 as a featured artist). Under the alias Sir Cartier, he began his career by self‑releasing three mixtapes: THC: The High Chronical (2011), Young Misfit (2012), and Sensation (2013). These early works helped shape his experimental sound and laid the foundation for his rise in the underground rap scene.
+
+In 2015, Carti gained widespread attention with the viral success of his singles "Broke Boi" and "Fetti" (featuring Dash and Maxo Kream), released on SoundCloud. The buzz surrounding these tracks led to his signing with Interscope Records and ASAP Mob's AWGE imprint in 2016. His commercial breakthrough came in April 2017 with the release of his self‑titled debut mixtape, Playboi Carti. The mixtape peaked at number 12 on the US Billboard 200, driven by the success of the single "Magnolia," which reached number 29 on the Billboard Hot 100 and was certified triple platinum by the RIAA. Another hit from the mixtape, "Wokeuplikethis" featuring Lil Uzi Vert, charted on the Hot R&B/Hip-Hop Songs chart.
+
+Carti’s debut studio album, Die Lit, was released in May 2018. It debuted at number three on the Billboard 200, earning 61,000 album‑equivalent units in its first week. Praised for its innovative approach to trap music, the album included the platinum‑certified track "Shoota," featuring Lil Uzi Vert, which peaked at number 46 on the Billboard Hot 100. Following a two‑year hiatus, Carti returned with the single "@ Meh" in April 2020, which debuted at number 35 on the Billboard Hot 100. His highly anticipated second studio album, Whole Lotta Red, was released in December 2020. It debuted at number one on the Billboard 200 with 100,000 album‑equivalent units in its first week, marking Carti's first number‑one album. The project featured notable tracks such as "Go2DaMoon" featuring Kanye West, which peaked at number 30 on the Hot R&B/Hip-Hop Songs chart, and "Sky", which gained widespread acclaim and popularity.
+
+In May 2021, Carti was featured on Trippie Redd’s single "Miss the Rage", which debuted at number 11 on the Billboard Hot 100 and earned platinum certification. Later that year, he appeared on Kanye West’s "Off the Grid" alongside Fivio Foreign, a track from West's Donda album that was widely celebrated. In February 2024, Carti collaborated with Kanye West and Ty Dolla Sign on the single "Carnival", alongside Rich the Kid. The track, part of the collaborative album Vultures 1, marked Carti's first number‑one song on the Billboard Hot 100. Carti has countlessly teased his third upcoming studio album titled I Am Music, which has been in development hell for years.
+
+Albums
+Studio albums
+Title          Album details          Peak chart positions          Sales          Certifications
+Die Lit
+Released: May 11, 2018
+Label: AWGE, Interscope
+Format: Digital download, streaming, bootleg LP
+US: 5,000
+RIAA: Gold
+BPI: Gold
+Whole Lotta Red
+Released: December 25, 2020
+Label: AWGE, Interscope
+Format: LP, digital download, streaming
+US: 10,000
+RIAA: Gold
+BPI: Gold
+I Am Music
+Scheduled: TBA
+Label: AWGE, Interscope
+Format: CD, LP, digital download, streaming
+To be released
+
+Mixtapes
+Title                           Mixtape details
+THC: The High Chronical (as Sir Cartier)
+Released: November 5, 2011
+Label: Self‑released; Format: Digital download
+Young Misfit (as Sir Cartier)
+Released: November 12, 2012
+Label: Self‑released; Format: Digital download
+Sensation (as Sir Cartier)
+Released: July 15, 2013
+Label: Self‑released; Format: Digital download
+Playboi Carti
+Released: April 14, 2017
+Label: AWGE, Interscope; Format: CD, LP, digital download, streaming
+US: 7,000; RIAA: Platinum; BPI: Silver
+
+Extended plays
+Title                  EP details
+Death in Tune
+Released: May 13, 2015; Label: Self‑released; Format: Digital download, streaming
+PlayboiFresh (with Chris Fresh)
+Released: February 11, 2016; Label: Self‑released; Format: Digital download, streaming
+
+[Additional sections for Singles, Guest appearances, Music videos, etc. follow on the Wikipedia page.]
+
+Text is available under the Creative Commons Attribution-ShareAlike 4.0 License.
+        </pre>
+      </details>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Playboi Carti Discography Site. All data is sourced from publicly available information and Wikipedia.</p>
+  </footer>
+
+  <!-- JavaScript for Collapsibles and Breath Tracker -->
+  <script>
+    // Real-Time Breath Tracker
+    function calculateBreaths() {
+      const birthYear = 1995;
+      const birthMonth = 9;
+      const birthDay = 13;
+      const birthHour = 8;
+      const birthMinute = 45;
+      const birthSecond = 0;
+      const avgBreathsPerMinute = 16;
+      
+      const birthDate = new Date(birthYear, birthMonth - 1, birthDay, birthHour, birthMinute, birthSecond);
+      let currentTime = new Date();
+      let secondsSinceBirth = Math.floor((currentTime - birthDate) / 1000);
+      let totalBreaths = (secondsSinceBirth / 60) * avgBreathsPerMinute;
+      
+      function updateBreaths() {
+        totalBreaths += avgBreathsPerMinute / 60;
+        document.getElementById("breathCount").innerText = Math.floor(totalBreaths).toLocaleString();
+      }
+      
+      setInterval(updateBreaths, 1000);
+      document.getElementById("breathCount").innerText = Math.floor(totalBreaths).toLocaleString();
+    }
+    window.onload = calculateBreaths;
+
+    // Collapsible Sections Script
+    document.addEventListener("DOMContentLoaded", function() {
+      const coll = document.getElementsByClassName("collapsible");
+      for (let i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+          this.classList.toggle("active");
+          const content = this.nextElementSibling;
+          if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+          } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
