@@ -1,434 +1,461 @@
-/* ✅ Shop Status Section Styling */
-#status-section {
-  font-size: 0.9rem;
-  color: #fff;
-  padding: 10px 15px;
-  border-radius: 50px; /* Rounded Circle */
-  display: inline-block;
-  margin-left: auto;
-  background-color: #28a745; /* Default to Green */
-  transition: background-color 0.3s ease-in-out;
-  margin-top: 5px; /* ✅ Shift the button down slightly */
-}
-
-/* ✅ Mobile adjustments for status section */
-@media (max-width: 768px) {
-  #status-section {
-    margin-top: 8px;
-    margin-left: 0;
-    align-self: flex-end;
-    padding: 8px 12px;
-    font-size: 0.85rem;
-  }
-}
-
-/* ✅ Tips Section Styling */
-.tips-section {
-  background-color: #f1f1f1;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  margin: 20px auto;
-  max-width: 800px;
-  text-align: left;
-}
-
-.tips-section h2 {
-  text-align: center;
-  color: #2d89ef;
-}
-
-.tips-section ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.tips-section li {
-  margin: 10px 0;
-  font-size: 1rem;
-  color: #333;
-}
-
-.tips-section li a {
-  color: #2d89ef;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.tips-section li a:hover {
-  text-decoration: underline;
-}
-
-/* ✅ General Styles */
-body {
-  font-family: Arial, sans-serif;
+/* ====================================================
+   Global Reset & Basic Styles
+====================================================== */
+* {
   margin: 0;
   padding: 0;
-  background-color: #ffffff; /* ✅ Ensure white background */
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f4f4f4;
   color: #333;
   line-height: 1.6;
+  animation: fadeIn 0.6s ease-in-out;
 }
 
-/* ✅ Header Styling (Desktop & Mobile Consistency) */
+/* ====================================================
+   Animation Keyframes
+====================================================== */
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes slideIn {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-5px); }
+  60% { transform: translateY(-3px); }
+}
+
+/* ====================================================
+   Header & Navigation
+====================================================== */
 header {
+  background: #1d1d1d;
+  color: #fff;
+  padding: 20px 30px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
-  background-color: #ffca12;
-  color: gray;
+  justify-content: space-between;
+  position: relative;
+  animation: slideIn 0.5s ease-out;
 }
-
+.header-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 header h1 {
-  font-size: 1.8rem;
+  font-size: 2rem;
   margin: 0;
-  text-align: left; /* ✅ Left-align header title */
 }
 
-/* ✅ General Navigation Bar Styling (Desktop) */
+/* Updated Navigation Bar */
 .nav-bar {
   display: flex;
-  justify-content: space-around;
-  background-color: #231f20;
-  padding: 10px;
-  border-radius: 12px; /* ✅ Rounded edges for nav buttons */
-  margin: 0;
+  justify-content: center;
+  gap: 30px;
 }
-
-.nav-bar li {
-  list-style: none;
-}
-
 .nav-bar a {
-  display: inline-block;
-  padding: 8px 12px;
-  background-color: #231f20;
-  color: white;
+  font-size: 1.1rem;
+  padding: 10px 20px;
+  border-radius: 5px;
   text-decoration: none;
-  border-radius: 8px; /* ✅ Softer edges for buttons */
-  transition: background-color 0.3s ease;
+  color: #fff;
+  position: relative;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
-
-.nav-bar a:hover {
-  background-color: #946c1c;
-}
-
-/* ✅ Mobile Navigation Bar (Horizontal Layout with Rounded Buttons) */
-@media (max-width: 768px) {
-  /* ✅ Header Layout for Mobile (Fixed Left Alignment) */
-  header {
-    flex-direction: column;
-    align-items: flex-start; /* ✅ Ensure header remains left-aligned */
-  }
-
-  header h1 {
-    text-align: left;
-    width: 100%;
-  }
-
-  .nav-bar {
-    flex-direction: row; /* ✅ Horizontal layout */
-    justify-content: space-around;
-    width: 100%;
-    padding: 10px 0;
-    border-radius: 12px; /* ✅ Softer edges for mobile nav bar */
-    background-color: #231f20;
-  }
-
-  .nav-bar li {
-    flex-grow: 1;
-    text-align: center;
-  }
-
-  .nav-bar a {
-    display: inline-block;
-    padding: 10px 0;
-    border-radius: 12px; /* ✅ Keep buttons rounded */
-    font-size: 14px;
-  }
-
-  /* ✅ Status Button Position on Mobile */
-  #status-section {
-    margin-top: 8px;
-    align-self: flex-start;
-  }
-}
-
-
-
-/* Hero Section */
-.hero {
-  text-align: center;
+.nav-bar a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
   background-color: #ffca12;
-  color: white;
+  left: 50%;
+  bottom: -4px;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+.nav-bar a:hover::after,
+.nav-bar a.active::after {
+  width: 100%;
+  left: 0;
+}
+.nav-bar a:hover,
+.nav-bar a.active {
+  background-color: rgba(255, 202, 18, 0.2);
+  color: #ffca12;
+}
+
+/* ====================================================
+   Shop Status Button
+====================================================== */
+#status-section {
+  margin-left: 20px;
+}
+#shop-status {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: default;
+  background-color: #3a8bbf; /* Muted blue for Open */
+  color: #fff;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+}
+#shop-status.absent {
+  background-color: #c0392b; /* Muted red for Closed */
+}
+
+/* ====================================================
+   Hero Section
+====================================================== */
+.hero {
+  background: linear-gradient(135deg, #1d1d1d, #333);
+  color: #fff;
+  text-align: center;
   padding: 80px 20px;
-  margin: 0;
+  animation: fadeIn 0.8s ease-out;
 }
-
-.hero h1 {
-  font-size: 3rem;
-  margin: 0 0 20px 0;
-}
-
 .hero h2 {
-  font-size: 2.5rem;
-  color: #3c445e; /* Title color */
-  margin-bottom: 10px;
+  font-size: 3rem;
+  margin-bottom: 20px;
 }
-
 .hero p {
   font-size: 1.2rem;
-  color: #3c445e; /* Subtitle color */
+  margin-bottom: 30px;
 }
-
 .hero .btn {
+  background: #ffca12;
+  color: #1d1d1d;
   padding: 15px 30px;
-  font-size: 1rem;
-  font-weight: bold;
-  background-color: #231f20;
-  color: white;
   border: none;
   border-radius: 5px;
   text-decoration: none;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
-
 .hero .btn:hover {
-  background-color: #946c1c;
+  background: #ffc107;
+  transform: scale(1.03);
 }
 
-/* ✅ Product List Grid Layout */
+/* ====================================================
+   Product List & Cards
+====================================================== */
 .product-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
   padding: 20px;
+  animation: fadeIn 0.6s ease;
 }
-
-/* ✅ Product Card Styling */
 .product-card {
-  background-color: white;
-  padding: 15px;
+  background: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  max-width: 100%; /* ✅ Ensure cards don't shrink */
-  height: 100%; /* ✅ Ensure equal card height */
+  padding: 15px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: transform 0.3s ease;
+  animation: slideIn 0.5s ease;
 }
-
-/* ✅ Ensure all product images are the same size */
+.product-card:hover {
+  transform: translateY(-3px);
+}
 .product-card img {
   width: 100%;
-  max-width: 200px; /* ✅ Control max image size */
-  height: 200px; /* ✅ Fixed height for consistency */
+  max-width: 200px;
+  height: 200px;
   object-fit: cover;
   border-radius: 5px;
-  margin: 0 auto;
+  margin: 0 auto 10px;
 }
-
-/* ✅ Product Title Styling */
 .product-card h3 {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   margin: 10px 0;
+  text-align: center;
 }
-
-/* ✅ Product Description */
 .product-card p {
   font-size: 1rem;
-  margin: 5px 0;
+  text-align: center;
+  margin-bottom: 10px;
 }
-
-/* ✅ Product Button Styling (Redesigned) */
 .product-card button {
-  padding: 8px 16px;
-  background-color: #231f20;
+  background: #1d1d1d;
   color: #fff;
   border: none;
-  border-radius: 25px; /* ✅ More rounded button */
+  border-radius: 25px;
+  padding: 10px 20px;
   cursor: pointer;
   font-size: 0.9rem;
-  margin-top: 12px;
-  width: fit-content; /* ✅ Ensure button is only as wide as its text */
-  align-self: center; /* ✅ Center the button */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* ✅ Subtle shadow for modern look */
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  align-self: center;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
-
 .product-card button:hover {
-  background-color: #946c1c;
-  transform: scale(1.05); /* ✅ Slight grow effect on hover */
+  background: #555;
+  transform: scale(1.03);
+  animation: bounce 0.3s ease;
 }
 
-
-/* Cart Styling */
-.cart-container {
-  max-width: 600px;
-  margin: 30px auto;
+/* ====================================================
+   Tips Section
+====================================================== */
+.tips-section {
+  background: #fff;
+  border-left: 4px solid #2d89ef;
   padding: 20px;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 800px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  color: #333;
+}
+.tips-section h2 {
+  font-size: 1.75rem;
+  margin-bottom: 15px;
+  color: #2d89ef;
+}
+.tips-section ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+.tips-section li {
+  margin-bottom: 10px;
+  font-size: 1rem;
 }
 
-.cart-container h2 {
-  text-align: center;
-  margin-bottom: 20px;
+/* ====================================================
+   Cart Page & Checkout Layout
+====================================================== */
+#cart-items {
+  max-width: 800px;
+  margin: 30px auto;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  animation: fadeIn 0.6s ease;
 }
-
-.cart-item {
+#cart-items .cart-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 }
-
-.cart-item span {
+#cart-items .cart-item:last-child {
+  border-bottom: none;
+}
+#cart-items .cart-item span {
   font-size: 1rem;
+  font-weight: 500;
 }
-
-.cart-item button {
-  background-color: #ff4d4d;
-  color: white;
+#cart-items .cart-item button {
+  background: #e74c3c;
+  color: #fff;
   border: none;
   border-radius: 5px;
-  padding: 5px 10px;
-  font-size: 0.9rem;
+  padding: 6px 12px;
   cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
-
-.cart-item button:hover {
-  background-color: #cc0000;
+#cart-items .cart-item button:hover {
+  background: #c0392b;
+  transform: scale(1.03);
 }
-
 #cart-total {
-  text-align: center;
-  font-size: 1.25rem;
-  margin: 20px 0;
+  max-width: 800px;
+  margin: 10px auto;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: right;
 }
 
-#checkout-button {
-  display: block;
+/* ====================================================
+   Checkout Form & Order Summary
+====================================================== */
+#checkout-form {
+  max-width: 800px;
   margin: 20px auto;
-  padding: 10px 20px;
-  background-color: #28a745;
-  color: white;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  animation: slideIn 0.5s ease;
+}
+#checkout-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 1rem;
+}
+#checkout-form input[type="text"],
+#checkout-form input[type="date"],
+#checkout-form input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+#checkout-form button {
+  background: #6c757d;
+  color: #fff;
+  padding: 12px 20px;
   border: none;
   border-radius: 5px;
-  font-size: 1rem;
   cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+#checkout-form button:hover {
+  background: #5a6268;
+  transform: scale(1.03);
 }
 
-#checkout-button:hover {
-  background-color: #218838;
-}
-
-/* Location Options Styling */
+/* ====================================================
+   Location Options
+====================================================== */
 .location-options {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 15px;
+  justify-items: center;
   margin: 20px 0;
 }
-
 .location-option {
-  position: relative;
-  border: none;
-  background-color: #fff;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
+  transition: border 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
 .location-option:hover {
-  transform: scale(1.05);
+  border-color: #2d89ef;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
-
 .location-option img {
-  width: 100px;
-  height: 100px;
-  border-radius: 8px;
-  margin-bottom: 10px;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 8px;
 }
-
 .location-option span {
-  display: block;
-  font-weight: bold;
+  font-size: 0.9rem;
   color: #333;
 }
 
-/* Time Option Styling */
+/* ====================================================
+   Time Options for Checkout
+====================================================== */
 .time-option {
+  background: #231f20;
+  color: #fff;
   padding: 10px 20px;
-  background-color: #231f20;
-  color: white;
   border: none;
   border-radius: 5px;
   margin: 5px;
   cursor: pointer;
-  text-align: center;
+  transition: background 0.3s ease, transform 0.3s ease;
 }
-
 .time-option:hover {
-  background-color: #946c1c;
+  background: #555;
+  transform: scale(1.05);
 }
-
 .time-option.selected {
-  background-color: #946c1c;
-  color: #fff;
+  background: #946c1c;
   font-weight: bold;
 }
 
-/* Footer */
-footer {
-  background-color: #333;
-  color: white;
-  text-align: center;
-  padding: 15px 0;
-  box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2);
-  font-size: 0.9rem;
-  position: relative;
-  bottom: 0;
-  width: 100%;
-}
-
-/* Utility Classes */
-.text-center {
-  text-align: center;
-}
-
-.hidden {
-  display: none;
-}
-
-/* ✅ "Go to Cart" Button Styling for All Devices */
+/* ====================================================
+   "Go to Cart" Floating Button
+====================================================== */
 #cart-button-container {
   position: fixed;
   bottom: 20px;
   right: 20px;
   z-index: 1000;
 }
-
 #go-to-cart {
-  background-color: #28a745;
-  color: white;
+  background: #28a745;
+  color: #fff;
   padding: 12px 20px;
   border: none;
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: background 0.3s ease, transform 0.3s ease;
 }
-
 #go-to-cart:hover {
-  background-color: #218838;
+  background: #218838;
+  transform: scale(1.05);
 }
 
+/* ====================================================
+   Footer
+====================================================== */
+footer {
+  background: #1d1d1d;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+  margin-top: 20px;
+  animation: fadeIn 0.6s ease;
+}
+footer p {
+  font-size: 0.9rem;
+}
 
+/* ====================================================
+   Input & Button Focus States
+====================================================== */
+input:focus, button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(33,150,243,0.5);
+  transition: box-shadow 0.3s ease;
+}
+
+/* ====================================================
+   Responsive Adjustments
+====================================================== */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  header h1 {
+    width: 100%;
+    text-align: left;
+  }
+  .nav-bar {
+    width: 100%;
+    justify-content: space-around;
+  }
+  .product-list {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  .tips-section, #cart-items, #checkout-form {
+    max-width: 95%;
+    margin: 10px auto;
+  }
+}

@@ -1,8 +1,25 @@
-// ✅ Function to update the "Go to Cart" button with cart count
+/* ===============================
+   Global Variables & Cart Setup
+=============================== */
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let selectedTimeText = "";
+
+/* ===============================
+   Utility Functions
+=============================== */
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  const cartUpdatedEvent = new Event("cartUpdated");
+  document.dispatchEvent(cartUpdatedEvent);
+}
+
+/* ===============================
+   Cart & Product Display Functions
+=============================== */
 function updateCartButton() {
   const cartButtonContainer = document.getElementById("cart-button-container");
+  if (!cartButtonContainer) return;
   const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
-
   if (itemCount > 0) {
     cartButtonContainer.innerHTML = `
       <button id="go-to-cart" onclick="window.location.href='cart.html'">
@@ -14,143 +31,36 @@ function updateCartButton() {
   }
 }
 
-// ✅ Ensure the button updates whenever the cart is modified
 document.addEventListener("DOMContentLoaded", () => {
   updateCartButton();
   document.addEventListener("cartUpdated", updateCartButton);
 });
 
-// ✅ Trigger "cartUpdated" event when adding to cart
-// Function to add items to the cart
-function addToCart(product) {
-  const existingProduct = cart.find((item) => item.id === product.id);
-
-  if (existingProduct) {
-    existingProduct.quantity++;
-  } else {
-    cart.push({ ...product, quantity: 1 });
-  }
-
-  saveCart();
-
-  // Alert the user
-  alert(`${product.name} added to the cart!`);
-
-  // Refresh the page to reflect the updated cart
-  setTimeout(() => {
-    location.reload();
-  }, 500); // Adds a small delay to ensure everything is saved
-}
-
-// ✅ Trigger "cartUpdated" event when removing from cart
-function removeFromCart(productId) {
-  const productIndex = cart.findIndex((item) => item.id === productId);
-
-  if (productIndex > -1) {
-    if (cart[productIndex].quantity > 1) {
-      cart[productIndex].quantity--;
-    } else {
-      cart.splice(productIndex, 1);
-    }
-  }
-
-  saveCart();
-  updateCartDisplay();
-  updateCartButton(); // ✅ Update the "Go to Cart" button immediately
-}
-
-
-// Cart functionality
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-// Function to display products on the products page
-function displayProducts() {
-  const products = [
-    { id: 1, name: "Cool Ranch Doritos", price: 1.5, image: "images/product-1.png" },
-    { id: 2, name: "Nacho Cheese Doritos", price: 1.5, image: "images/product-2.png" },
-    { id: 3, name: "Cheeto Puffs", price: 1.5, image: "images/product-3.png" },
-    { id: 4, name: "Cheetos", price: 1.5, image: "images/product-4.png" }
-  ];
-
-  const productContainer = document.getElementById("products");
-  if (!productContainer) return;
-
-  productContainer.innerHTML = "";
-
-  products.forEach((product) => {
-    const stock = localStorage.getItem(`product_${product.id}_stock`) || "Loading...";
-    const productCard = document.createElement("div");
-    productCard.className = "product-card";
-    productCard.innerHTML = `
-      <img src="${product.image}" alt="${product.name}" class="product-image">
-      <h3>${product.name}</h3>
-      <p>Price: $${product.price.toFixed(2)}</p>
-      <p class="stock-info">Stock: ${stock}</p>
-      <button class="add-to-cart" data-id="${product.id}" ${stock === "0" ? "disabled" : ""}>
-        ${stock === "0" ? "Out of Stock" : "Add to Cart"}
-      </button>
-    `;
-    productContainer.appendChild(productCard);
-  });
-
-  // ✅ Attach event listeners to the "Add to Cart" buttons after rendering
-  document.querySelectorAll(".add-to-cart").forEach((button) => {
-    button.addEventListener("click", function () {
-      const productId = parseInt(this.getAttribute("data-id"));
-      const product = products.find((item) => item.id === productId);
-      if (product) {
-        addToCart(product);
-      }
-    });
-  });
-}
-
-// Function to add items to the cart
-function addToCart(product) {
-  const existingProduct = cart.find((item) => item.id === product.id);
-
-  if (existingProduct) {
-    existingProduct.quantity++;
-  } else {
-    cart.push({ ...product, quantity: 1 });
-  }
-
-  alert(`${product.name} added to the cart!`);
-  saveCart();
-  updateCartDisplay();
-}
-
-// Function to update the cart display
 function updateCartDisplay() {
   const cartContainer = document.getElementById("cart-items");
   const cartTotal = document.getElementById("cart-total");
-
   if (!cartContainer) return;
-
   cartContainer.innerHTML = "";
   let total = 0;
-
   if (cart.length === 0) {
     cartContainer.innerHTML = "<p>Your cart is empty.</p>";
     cartTotal.innerHTML = "";
     return;
   }
-
   cart.forEach((item) => {
     total += item.price * item.quantity;
     const cartItem = document.createElement("div");
     cartItem.className = "cart-item";
+    // Display only the product name and quantity
     cartItem.innerHTML = `
       <div>
-        <span>${item.name} - $${item.price.toFixed(2)} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}</span>
+        <span>${item.name} (Qty: ${item.quantity})</span>
         <button class="remove-from-cart" data-id="${item.id}">Remove</button>
       </div>
     `;
     cartContainer.appendChild(cartItem);
   });
-
   cartTotal.innerHTML = `<p><strong>Total: $${total.toFixed(2)}</strong></p>`;
-
   document.querySelectorAll(".remove-from-cart").forEach((button) => {
     button.addEventListener("click", (event) => {
       const productId = parseInt(event.target.getAttribute("data-id"));
@@ -159,10 +69,8 @@ function updateCartDisplay() {
   });
 }
 
-// Function to remove items from the cart
 function removeFromCart(productId) {
   const productIndex = cart.findIndex((item) => item.id === productId);
-
   if (productIndex > -1) {
     if (cart[productIndex].quantity > 1) {
       cart[productIndex].quantity--;
@@ -170,44 +78,187 @@ function removeFromCart(productId) {
       cart.splice(productIndex, 1);
     }
   }
+  saveCart();
+  updateCartDisplay();
+  updateCartButton();
+}
 
+/* ===============================
+   Product Page Functions - Dynamic via Google Sheets
+=============================== */
+// Constants for Google Sheets API
+const API_KEY = 'AIzaSyDqd1fC7NRMLVMDHMvhNtZC5O8rJqjNNeE';
+const SHEET_ID = '13DiBvVe-jNM_o2CjdZXm34jLS0konxycmssb4BKpx8k';
+const SHEET_NAME = 'Sheet1';
+
+// Fetch product data from Google Sheets
+async function loadProductData() {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    if (data.values) {
+      updateProductsFromSheet(data.values);
+    } else {
+      console.error('Failed to load product data from Google Sheets.');
+    }
+  } catch (error) {
+    console.error('Error loading product data:', error);
+  }
+}
+
+function updateProductsFromSheet(sheetData) {
+  const productContainer = document.getElementById("products");
+  if (!productContainer) return;
+
+  productContainer.innerHTML = "";
+
+  // Assume the first row is headers; product data starts at row 2 (index 1)
+  for (let i = 1; i < sheetData.length; i++) {
+    const row = sheetData[i];
+    const id = i; // Using the row number as product ID
+    const name = row[1] || `Product ${id}`;  // Column B: Product Name
+    const price = parseFloat(row[3]) || 0;    // Column D: Product Price
+    const stock = parseInt(row[4]) || 0;      // Column E: Stock
+    // Column F: Image URL (if provided); fallback to default naming convention if not provided
+    const image = row[5] && row[5].trim() !== "" ? row[5] : `images/product-${id}.png`;
+
+    // Save stock in localStorage for later validation
+    localStorage.setItem(`product_${id}_stock`, stock);
+
+    const productCard = document.createElement("div");
+    productCard.className = "product-card";
+    productCard.innerHTML = `
+      <img src="${image}" alt="${name}" class="product-image">
+      <h3>${name}</h3>
+      <p>Price: $${price.toFixed(2)}</p>
+      <p class="stock-info">Stock: ${stock}</p>
+      <button class="add-to-cart" data-id="${id}" ${stock === 0 ? "disabled" : ""}>
+        ${stock === 0 ? "Out of Stock" : "Add to Cart"}
+      </button>
+    `;
+    productContainer.appendChild(productCard);
+  }
+
+  // Attach event listeners to all "Add to Cart" buttons
+  document.querySelectorAll(".add-to-cart").forEach((button) => {
+    button.addEventListener("click", function () {
+      const productId = parseInt(this.getAttribute("data-id"));
+      const row = sheetData[productId]; // using row index as product ID
+      const product = {
+        id: productId,
+        name: row[1],
+        price: parseFloat(row[3]),
+        image: row[5] && row[5].trim() !== "" ? row[5] : `images/product-${productId}.png`
+      };
+
+      const currentStock = parseInt(localStorage.getItem(`product_${productId}_stock`)) || 0;
+      const existingProduct = cart.find((item) => item.id === productId);
+      const currentQuantity = existingProduct ? existingProduct.quantity : 0;
+
+      if (currentQuantity >= currentStock) {
+        alert("Cannot add more than available stock.");
+        return;
+      }
+
+      addToCart(product);
+    });
+  });
+}
+
+function addToCart(product) {
+  const existingProduct = cart.find((item) => item.id === product.id);
+  if (existingProduct) {
+    existingProduct.quantity++;
+  } else {
+    cart.push({ ...product, quantity: 1 });
+  }
+  alert(`${product.name} added to the cart!`);
   saveCart();
   updateCartDisplay();
 }
 
-// Function to handle checkout
-function handleCheckout() {
-  const checkoutForm = document.getElementById("checkout-form");
-  if (!checkoutForm) return;
-
-  loadCheckoutFormData();
-  populateTimeOptions();
-
-  let selectedLocation = "";
-  let selectedTimeText = ""; // Store the time button's text
-
-  // Handle location selection
-  document.querySelectorAll(".location-option").forEach((button) => {
-    button.addEventListener("click", () => {
-      selectedLocation = button.getAttribute("data-location");
-      document.querySelectorAll(".location-option").forEach((btn) => btn.style.border = "none");
-      button.style.border = "2px solid #ffca12";
-    });
+/* ===============================
+   Time Options for Checkout (Static Buttons)
+=============================== */
+function populateTimeOptions() {
+  const timeOptions = [
+    "8:15/8:45 AM (Before School)",
+    "10:15/10:55 AM (Break)",
+    "12:55 PM (Lunch)"
+  ];
+  const timeContainer = document.getElementById("time-options");
+  if (!timeContainer) return;
+  timeContainer.innerHTML = "";
+  timeOptions.forEach((time) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.classList.add("time-option");
+    button.textContent = time;
+    button.dataset.time = time;
+    timeContainer.appendChild(button);
   });
-
-  // Handle time selection using the exact text from the button
   document.querySelectorAll(".time-option").forEach((button) => {
     button.addEventListener("click", (event) => {
       event.preventDefault();
-      selectedTimeText = button.textContent.trim(); // Use the exact button text
+      selectedTimeText = button.dataset.time;
       document.querySelectorAll(".time-option").forEach((btn) => btn.classList.remove("selected"));
       button.classList.add("selected");
     });
   });
+}
 
-  // Checkout button validation and submission
+document.addEventListener("DOMContentLoaded", () => {
+  const dateInput = document.getElementById("date");
+  if (dateInput) {
+    dateInput.addEventListener("change", populateTimeOptions);
+    populateTimeOptions();
+  }
+});
+
+/* ===============================
+   Checkout Form Handling
+=============================== */
+function handleCheckout() {
+  const checkoutForm = document.getElementById("checkout-form");
+  if (!checkoutForm) return;
+  loadCheckoutFormData();
+  populateTimeOptions();
+
+  let selectedLocation = "";
+
+  document.querySelectorAll(".location-option").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedLocation = button.getAttribute("data-location");
+      document.querySelectorAll(".location-option").forEach((btn) => (btn.style.border = "none"));
+      button.style.border = "2px solid #ffca12";
+    });
+  });
+
   document.getElementById("checkout-button").addEventListener("click", (e) => {
     e.preventDefault();
+
+    // ----- Check if Pickup Date is Valid when Shop is Closed -----
+    const statusElement = document.getElementById("shop-status");
+    if (statusElement && statusElement.textContent.startsWith("Closed")) {
+      const regex = /Closed until (\d{1,2}\/\d{1,2}\/\d{4})/;
+      const match = statusElement.textContent.match(regex);
+      if (match && match[1]) {
+        const closeUntil = new Date(match[1]);
+        const selectedDate = document.getElementById("date").value;
+        if (selectedDate) {
+          const pickupDate = new Date(selectedDate);
+          if (pickupDate < closeUntil) {
+            alert("Pickup date must be on or after " + match[1] + " since the shop is closed until then.");
+            return;
+          }
+        } else {
+          alert("Please select a pickup date.");
+          return;
+        }
+      }
+    }
+    // --------------------------------------------------------------
 
     if (cart.length === 0) {
       alert("Your cart is empty. Please add items before proceeding to checkout.");
@@ -216,250 +267,121 @@ function handleCheckout() {
 
     const name = document.getElementById("name").value;
     const date = document.getElementById("date").value;
-
-    // Validation for required fields
     if (!name || !date || !selectedLocation || !selectedTimeText) {
       let errorMessage = "Please fill out the following missing fields:\n";
       if (!name) errorMessage += "- Name\n";
       if (!selectedLocation) errorMessage += "- Location\n";
       if (!date) errorMessage += "- Date\n";
       if (!selectedTimeText) errorMessage += "- Time\n";
-
       alert(errorMessage);
       return;
     }
 
     const now = new Date();
-    const selectedDateTime = new Date(`${date} ${selectedTimeText.split(" / ")[0]}`);
+    const selectedTimeForValidation = selectedTimeText.split("/")[0].trim();
+    const selectedDateTime = new Date(date + " " + selectedTimeForValidation);
 
-   // ✅ Prevent weekend orders
-const dayOfWeek = selectedDateTime.getDay();
-if (dayOfWeek === 0 || dayOfWeek === 6) {
-  alert("Orders cannot be placed on weekends. Please select a weekday.");
-  return;
-}
-
-
-    // Ensure the selected date and time is at least 10 minutes in the future
-    const timeDifference = selectedDateTime - now;
-   if (timeDifference < 600000) { // 600,000 milliseconds = 10 minutes
-      alert("Please select a time that is at least 10 minutes from now.");
+    if (selectedDateTime - now < 600000) {
+      alert("Please select a pickup time that is at least 10 minutes from now.");
       return;
     }
 
-    // Store order details in sessionStorage
     sessionStorage.setItem("checkoutCart", JSON.stringify(cart));
     sessionStorage.setItem("orderName", name);
     sessionStorage.setItem("orderLocation", selectedLocation);
-sessionStorage.setItem("orderTime", selectedTimeText.replace(" / ", " - "));
+    sessionStorage.setItem("orderTime", selectedTimeText);
     sessionStorage.setItem("orderDate", date);
 
-    // Redirect to checkout summary
     window.location.href = "checkout-summary.html";
   });
 }
 
-// Function to format time based on the selected date
-function formatTime(time, date) {
-  const dayOfWeek = new Date(date).getDay();
-  if (dayOfWeek === 1) {
-    if (time.includes("8:15")) return "8:45 AM";
-    if (time.includes("10:15")) return "10:50 AM";
-  }
-  return time.split(" / ")[0];
-}
-
-// Function to populate time options dynamically
-function populateTimeOptions() {
-  const timeOptions = [
-    "8:15 AM / 8:45 AM (Before School)",
-    "10:15 AM / 10:50 AM (Break)",
-    "12:55 PM (Lunch)",
-  ];
-
-  const timeContainer = document.getElementById("time-options");
-  if (!timeContainer) return;
-
-  timeContainer.innerHTML = "";
-  timeOptions.forEach((time) => {
-    const button = document.createElement("button");
-    button.classList.add("time-option");
-    button.textContent = time;
-    button.dataset.time = time; // Store the exact text
-    timeContainer.appendChild(button);
-  });
-}
-
-// Function to restrict weekends in the date picker
-function restrictWeekendDates() {
-  const dateInput = document.getElementById("date");
-  if (!dateInput) return;
-
-  dateInput.addEventListener("input", () => {
-    const selectedDate = new Date(dateInput.value);
-    const day = selectedDate.getDay();
-
-    if (day === 0 || day === 6) {
-      alert("Orders cannot be placed on weekends. Please select a weekday.");
-      dateInput.value = "";
-    }
-  });
-}
-
-// Save cart to localStorage
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-
-  // Dispatch custom event to update the UI
-  const cartUpdatedEvent = new Event("cartUpdated");
-  document.dispatchEvent(cartUpdatedEvent);
-}
-
-// Load form data from localStorage
 function loadCheckoutFormData() {
   const name = localStorage.getItem("checkoutFormName");
   const date = localStorage.getItem("checkoutFormDate");
-
   if (name) document.getElementById("name").value = name;
   if (date) document.getElementById("date").value = date;
 }
 
-// Load checkout summary from sessionStorage
+/* ===============================
+   Checkout Summary Loading with Dynamic Time Adjustment
+=============================== */
 function loadCheckoutSummary() {
   const checkoutCart = JSON.parse(sessionStorage.getItem("checkoutCart")) || [];
-  const orderName = sessionStorage.getItem("orderName") || "XXX";
-  const orderLocation = sessionStorage.getItem("orderLocation") || "XXX";
-  const orderDate = sessionStorage.getItem("orderDate") || "XXX";
-  const orderTime = sessionStorage.getItem("orderTime") || "XXX";
+  const orderName = sessionStorage.getItem("orderName") || "No Name Provided";
+  const orderLocation = sessionStorage.getItem("orderLocation") || "No Location Selected";
+  const orderDate = sessionStorage.getItem("orderDate") || "No Date Selected";
+  let orderTime = sessionStorage.getItem("orderTime") || "No Time Selected";
+
+  if (orderDate && orderTime.includes("/")) {
+    const dateObj = new Date(orderDate + "T00:00:00");
+    const day = dateObj.getDay();
+    const parts = orderTime.split("/");
+    if (day === 1) {
+      orderTime = parts[1].trim();
+    } else if (day >= 2 && day <= 5) {
+      orderTime = parts[0].trim();
+    }
+  }
 
   const orderSummary = document.getElementById("order-summary");
   let total = 0;
-
   orderSummary.innerHTML = "";
   checkoutCart.forEach((item) => {
     total += item.price * item.quantity;
-    orderSummary.innerHTML += `<p>${item.name} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}</p>`;
+    orderSummary.innerHTML += `<p>${item.name} (Qty: ${item.quantity})</p>`;
   });
 
   document.getElementById("order-name").textContent = orderName;
   document.getElementById("order-location").textContent = orderLocation;
-  document.getElementById("summary-order-date").textContent = orderDate;
-  document.getElementById("summary-order-time").textContent = orderTime;
+  document.getElementById("order-date").textContent = orderDate;
+  document.getElementById("order-time").textContent = orderTime;
+  document.getElementById("total-price").textContent = total.toFixed(2);
+  document.getElementById("order-date-time").textContent = `${orderDate} - ${orderTime}`;
 }
 
-// Initialize functionality
-document.addEventListener("DOMContentLoaded", () => {
-  if (document.getElementById("products")) displayProducts();
-  if (document.getElementById("cart-items")) updateCartDisplay();
-  if (document.getElementById("checkout-form")) handleCheckout();
-  if (document.getElementById("order-summary")) loadCheckoutSummary();
-  updateCartButton(); // ✅ Update the button on page load
-});
-
-// Google Sheets API Integration for Stock Tracking
-const API_KEY = 'AIzaSyDqd1fC7NRMLVMDHMvhNtZC5O8rJqjNNeE';  // Your API Key
-const SHEET_ID = '13DiBvVe-jNM_o2CjdZXm34jLS0konxycmssb4BKpx8k';  // Your Sheet ID
-const SHEET_NAME = 'Sheet1';  // Your Sheet Name
-
-// Function to update stock in Google Sheets
-async function updateStockInSheet(productId, newStock) {
-  const updateUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}!E${productId + 1}?valueInputOption=RAW&key=${API_KEY}`;
-
-  const body = {
-    range: `${SHEET_NAME}!E${productId + 1}`,
-    majorDimension: 'ROWS',
-    values: [[newStock]],
-  };
-
-  try {
-    const response = await fetch(updateUrl, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-
-    if (!response.ok) {
-      console.error('Error updating stock in Google Sheets:', response.statusText);
-    } else {
-      console.log('Stock updated successfully.');
-    }
-  } catch (error) {
-    console.error('Error updating stock:', error);
-  }
-}
-
-// Function to load stock data from Google Sheets
-async function loadStockData() {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
-
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (data.values) {
-      updateProductStock(data.values);
-    } else {
-      console.error('Failed to load stock data from Google Sheets.');
-    }
-  } catch (error) {
-    console.error('Error loading stock data:', error);
-  }
-}
-
-// Function to update product stock on the products page
-function updateProductStock(sheetData) {
-  const products = document.querySelectorAll('.product-card');
-
-  products.forEach((product, index) => {
-    if (sheetData[index + 1] && sheetData[index + 1][4] !== undefined) {
-      const stockValue = sheetData[index + 1][4];
-      const stockElement = product.querySelector('.stock-info');
-
-      // Ensure stockElement exists before updating it
-      if (stockElement) {
-        stockElement.textContent = `Stock: ${stockValue}`;
-        localStorage.setItem(`product_${index + 1}_stock`, stockValue);
-      } else {
-        console.error(`Stock element not found for product at index ${index}`);
-      }
-    }
-  });
-}
-
-// Call the loadStockData function on page load
-document.addEventListener('DOMContentLoaded', loadStockData);
-document.addEventListener("cartUpdated", updateCartButton);
-
-// ✅ Function to load shop status from Google Sheets
+/* ===============================
+   Shop Status & Stock Integration via Google Sheets
+=============================== */
 async function loadShopStatus() {
   try {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Sheet1!H2?key=${API_KEY}`;
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (data.values && data.values[0] && data.values[0][0]) {
-      const statusValue = data.values[0][0];
-      const statusElement = document.getElementById("shop-status");
-
+    const statusUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Sheet1!H2?key=${API_KEY}`;
+    const dateUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Sheet1!H3?key=${API_KEY}`;
+    const [statusResponse, dateResponse] = await Promise.all([fetch(statusUrl), fetch(dateUrl)]);
+    const statusData = await statusResponse.json();
+    const dateData = await dateResponse.json();
+    let statusElement = document.getElementById("shop-status");
+    if (statusData.values && statusData.values[0] && statusData.values[0][0]) {
+      const statusValue = statusData.values[0][0];
       if (statusValue === "1") {
-        statusElement.textContent = "Present";
-        statusElement.className = "present";
+        statusElement.outerHTML = `<button id="shop-status" class="present">Open</button>`;
       } else if (statusValue === "2") {
-        statusElement.textContent = "Absent";
-        statusElement.className = "absent";
+        let closeDate = "";
+        if (dateData.values && dateData.values[0] && dateData.values[0][0]) {
+          closeDate = dateData.values[0][0]; // Expected format: MM/DD/YYYY
+        }
+        statusElement.outerHTML = `<button id="shop-status" class="absent">Closed until ${closeDate}</button>`;
       } else {
-        statusElement.textContent = "Unknown";
-        statusElement.className = "";
+        statusElement.outerHTML = `<button id="shop-status">Unknown</button>`;
       }
     } else {
-      document.getElementById("shop-status").textContent = "Unknown";
+      statusElement.outerHTML = `<button id="shop-status">Unknown</button>`;
     }
   } catch (error) {
     console.error("Error loading shop status:", error);
-    document.getElementById("shop-status").textContent = "Error";
+    let statusElement = document.getElementById("shop-status");
+    statusElement.outerHTML = `<button id="shop-status">Error</button>`;
   }
 }
 
-document.addEventListener("DOMContentLoaded", loadShopStatus);
+/* ===============================
+   DOMContentLoaded Initialization
+=============================== */
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("products")) loadProductData();
+  if (document.getElementById("cart-items")) updateCartDisplay();
+  if (document.getElementById("checkout-form")) handleCheckout();
+  if (document.getElementById("order-summary")) loadCheckoutSummary();
+  updateCartButton();
+  loadShopStatus();
+});
