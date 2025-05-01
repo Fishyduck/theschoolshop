@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The School Shop</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<header>
+  <div class="header-container">
+    <div class="logo-menu-wrapper">
+      <button id="menu-toggle" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <h1>The School Shop</h1>
+    </div>
+    
+    <nav id="main-nav">
+      <ul class="nav-bar">
+        <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="products.html"><i class="fas fa-shopping-bag"></i> Products</a></li>
+        <li><a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+      </ul>
+    </nav>
+    
+    <div class="header-actions">
+      <div id="status-section">
+        <span id="shop-status">Loading...</span>
+      </div>
+      <!-- cart icon removed on home page per request -->
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div id="text-pressure-wrapper" style="position: relative; height: 300px;"></div>
+    <p>Quality items for students and teachers on campus!</p>
+    <a href="products.html" class="btn">Shop Now</a>
+  </section>
+  
+  <!-- About Section -->
+  <section id="about" class="about-section">
+    <h2>About The School Shop</h2>
+    <p>We provide convenient access to items, delivered right to your preferred location on campus.</p>
+    <div class="features-grid">
+      <div class="feature">
+        <i class="fas fa-clock feature-icon"></i>
+        <h3>Convenient Pickup Times</h3>
+        <p>Choose from multiple time slots throughout the day</p>
+      </div>
+      <div class="feature">
+        <i class="fas fa-map-marker-alt feature-icon"></i>
+        <h3>Multiple Locations</h3>
+        <p>Select your preferred pickup spot on campus, or request another spot</p>
+      </div>
+      <div class="feature">
+        <i class="fas fa-credit-card feature-icon"></i>
+        <h3>Easy Payment</h3>
+        <p>Pay with cash at pickup</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Footer Section -->
+<footer>
+  <section class="tips-section">
+    <h2>Tips</h2>
+    <ul>
+      <li>💡 Have any <strong>suggestions</strong> or want to see anything <strong>added to the store?</strong> Email us at <a href="mailto:theschoolshopowner@gmail.com">theschoolshopowner@gmail.com</a> or fill out a suggestion here!: <strong>https://tinyurl.com/shopcvhsideas</strong></li>
+      <li>💰 Current Only Accepting <strong>Cash</strong>!</li>
+      <li>⏰ Be sure to double-check your order time and location before checkout.</li>
+      <li>📅 Remember: Orders cannot be placed for weekends and are currently only for <strong>pickup in school</strong>.</li>
+      <li>💬 Reach out if you have any questions or concerns!</li>
+    </ul>
+  </section>
+  <p>&copy; <span id="current-year"></span> The School Shop. All rights reserved.</p>
+</footer>
+
+<!-- Link to Your JavaScript File -->
+<script src="config.js"></script>
+<script src="script.js"></script>
+<script>
+  // Set current year in footer
+  document.getElementById('current-year').textContent = new Date().getFullYear();
+</script>
+
+  <script type="text/babel">
+    const { useEffect, useRef, useState } = React;
+
+    const TextPressure = ({
+      text = 'Compressa',
+      fontFamily = 'Compressa VF',
+      fontUrl = 'https://res.cloudinary.com/dr6lvwubh/raw/upload/v1529908256/CompressaPRO-GX.woff2',
+      width = true,
+      weight = true,
+      italic = true,
+      alpha = false,
+      flex = true,
+      stroke = false,
+      scale = false,
+      textColor = '#FFFFFF',
+      strokeColor = '#FF0000',
+      minFontSize = 36,
+    }) => {
+      const containerRef = useRef(null);
+      const titleRef = useRef(null);
+      const spansRef = useRef([]);
+      const mouseRef = useRef({ x: 0, y: 0 });
+      const cursorRef = useRef({ x: 0, y: 0 });
+      const [fontSize, setFontSize] = useState(minFontSize);
+      const [scaleY, setScaleY] = useState(1);
+      const [lineHeight, setLineHeight] = useState(1);
+      const chars = text.split('');
+      const dist = (a, b) => {
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        return Math.sqrt(dx*dx + dy*dy);
+      };
+      useEffect(() => {
+        const handleMouseMove = e => {
+          cursorRef.current.x = e.clientX;
+          cursorRef.current.y = e.clientY;
+        };
+        const handleTouchMove = e => {
+          const t = e.touches[0];
+          cursorRef.current.x = t.clientX;
+          cursorRef.current.y = t.clientY;
+        };
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('touchmove', handleTouchMove, { passive: false });
+        if (containerRef.current) {
+          const rect = containerRef.current.getBoundingClientRect();
+          mouseRef.current.x = rect.left + rect.width/2;
+          mouseRef.current.y = rect.top + rect.height/2;
+          cursorRef.current.x = mouseRef.current.x;
+          cursorRef.current.y = mouseRef.current.y;
+        }
+        return () => {
+          window.removeEventListener('mousemove', handleMouseMove);
+          window.removeEventListener('touchmove', handleTouchMove);
+        };
+      }, []);
+      const setSize = () => {
+        if (!containerRef.current || !titleRef.current) return;
+        const { width: cw, height: ch } = containerRef.current.getBoundingClientRect();
+        let newFontSize = cw / (chars.length / 2);
+        newFontSize = Math.max(newFontSize, minFontSize);
+        setFontSize(newFontSize);
+        setScaleY(1);
+        setLineHeight(1);
+        requestAnimationFrame(() => {
+          if (!titleRef.current) return;
+          const tr = titleRef.current.getBoundingClientRect();
+          if (scale && tr.height > 0) {
+            const yRatio = ch / tr.height;
+            setScaleY(yRatio);
+            setLineHeight(yRatio);
+          }
+        });
+      };
+      useEffect(() => {
+        setSize();
+        window.addEventListener('resize', setSize);
+        return () => window.removeEventListener('resize', setSize);
+      }, [scale, text]);
+      useEffect(() => {
+        let rafId;
+        const animate = () => {
+          mouseRef.current.x += (cursorRef.current.x - mouseRef.current.x)/15;
+          mouseRef.current.y += (cursorRef.current.y - mouseRef.current.y)/15;
+          if (titleRef.current) {
+            const tr = titleRef.current.getBoundingClientRect();
+            const maxDist = tr.width/2;
+            spansRef.current.forEach(span => {
+              if (!span) return;
+              const r = span.getBoundingClientRect();
+              const cc = { x: r.x + r.width/2, y: r.y + r.height/2 };
+              const d = dist(mouseRef.current, cc);
+              const getAttr = (dist, min, max) => {
+                const val = max - Math.abs((max * dist)/maxDist);
+                return Math.max(min, val + min);
+              };
+              const wdth = width ? Math.floor(getAttr(d, 5, 200)) : 100;
+              const wght = weight ? Math.floor(getAttr(d, 100, 900)) : 400;
+              const italVal = italic ? getAttr(d, 0, 1).toFixed(2) : 0;
+              const alphaVal = alpha ? getAttr(d, 0, 1).toFixed(2) : 1;
+              span.style.opacity = alphaVal;
+              span.style.fontVariationSettings = `'wght' ${wght}, 'wdth' ${wdth}, 'ital' ${italVal}`;
+            });
+          }
+          rafId = requestAnimationFrame(animate);
+        };
+        animate();
+        return () => cancelAnimationFrame(rafId);
+      }, [width, weight, italic, alpha, chars.length]);
+      const dynamicClass = [flex ? 'flex' : '', stroke ? 'stroke' : ''].filter(Boolean).join(' ');
+      return (
+        <div ref={containerRef} style={{ position:'relative', width:'100%', height:'100%', background:'transparent' }}>
+          <style>{`
+            @font-face {
+              font-family: '${fontFamily}';
+              src: url('${fontUrl}');
+            }
+            .flex { display:flex; justify-content:space-between; }
+            .stroke span { position:relative; color:${textColor}; }
+            .stroke span::after {
+              content:attr(data-char);
+              position:absolute; left:0; top:0;
+              color:transparent; z-index:-1;
+              -webkit-text-stroke-width:3px;
+              -webkit-text-stroke-color:${strokeColor};
+            }
+            .text-pressure-title { color:${textColor}; }
+          `}</style>
+          <h1 ref={titleRef}
+              className={`text-pressure-title ${dynamicClass}`}
+              style={{
+                fontFamily, textTransform:'uppercase',
+                fontSize,fontSize, lineHeight,
+                transform:`scale(1,${scaleY})`,
+                transformOrigin:'center top', margin:0,
+                textAlign:'center', userSelect:'none',
+                whiteSpace:'nowrap', width:'100%'
+              }}>
+            {chars.map((c,i)=>(
+              <span key={i} ref={el=>spansRef.current[i]=el}
+                    data-char={c}
+                    style={{ display:'inline-block' }}>
+                {c}
+              </span>
+            ))}
+          </h1>
+        </div>
+      );
+    };
+
+    ReactDOM.render(
+      <TextPressure
+        text="Welcome to The School Shop"
+        flex={true}
+        alpha={false}
+        stroke={false}
+        width={true}
+        weight={true}
+        italic={true}
+        textColor="#ffffff"
+        strokeColor="#ff0000"
+        minFontSize={36}
+      />,
+      document.getElementById('text-pressure-wrapper')
+    );
+  </script>
+
+</body>
+</html>

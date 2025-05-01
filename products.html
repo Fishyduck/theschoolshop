@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products - The School Shop</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    /* Squares background canvas full-cover */
+    #squares-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    .squares-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    /* Uniform Add to Cart button sizing */
+    .product-card .add-to-cart {
+      display: block !important;
+      width: 100% !important;
+      box-sizing: border-box;
+      margin-top: 8px !important;
+    }
+  </style>
+
+
+  <style>
+    /* Align Add to Cart buttons at bottom of card for horizontal alignment */
+    .product-card .product-details {
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    .product-card .add-to-cart {
+      margin-top: auto !important;
+    }
+  </style>
+
+
+  <style>
+    /* Force uniform Add to Cart button dimensions and bottom alignment */
+    .product-card .product-details {
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    .product-card .add-to-cart {
+      flex: none !important;
+      width: 150px !important;
+      height: 40px !important;
+      font-size: 1rem !important;
+      align-self: center !important;
+      margin-top: auto !important;
+    }
+  </style>
+
+
+  
+  <style>
+    /* Add space between stock info and controls/buttons */
+    .product-card .stock-info {
+      margin-bottom: 1rem !important;
+    }
+  </style>
+
+  <style>
+    /* Heading style for Snacks & Drinks */
+    .section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+  </style>
+
+</head>
+
+<body class="products-page">
+  <div id="squares-wrapper"></div>
+<header>
+  <div class="header-container">
+    <h1>The School Shop</h1>
+
+    <!-- ✅ Updated Navigation Bar -->
+    <nav>
+      <ul class="nav-bar">
+        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="products.html" class="active"><i class="fas fa-shopping-bag"></i> Products</a></li>
+        <li><a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+      </ul>
+    </nav>
+
+    <!-- ✅ Shop Status Section -->
+    <section id="status-section">
+      <span id="shop-status">Loading...</span>
+    </section>
+  </div>
+</header>
+
+<main style="position:relative; z-index:1;">
+  <h2 class="section-title">Snacks & Drinks</h2>
+  <div id="products" class="product-list"></div>
+
+  <!-- ✅ Cart Button Placeholder -->
+  <div id="cart-button-container">
+    <button id="go-to-cart">
+      <i class="fas fa-shopping-cart"></i> Go to Cart (0)
+    </button>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; <span id="current-year"></span> The School Shop. All rights reserved.</p>
+</footer>
+
+<!-- ✅ Ensure JavaScript Link -->
+<script src="config.js"></script>
+<script src="script.js"></script>
+<script>
+  // Set current year in footer
+  document.getElementById('current-year').textContent = new Date().getFullYear();
+</script>
+
+  <script type="text/babel">
+    const { useRef, useEffect } = React;
+    const Squares = ({
+      direction = 'diagonal',
+      speed = 0.5,
+      borderColor = '#666',
+      squareSize = 40,
+      hoverFillColor = '#333',
+      className = ''
+    }) => {
+      const canvasRef = useRef(null);
+      const requestRef = useRef(null);
+      const numX = useRef();
+      const numY = useRef();
+      const offset = useRef({ x: 0, y: 0 });
+      const hovered = useRef(null);
+
+      useEffect(() => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        const resize = () => {
+          canvas.width = canvas.offsetWidth;
+          canvas.height = canvas.offsetHeight;
+          numX.current = Math.ceil(canvas.width / squareSize) + 1;
+          numY.current = Math.ceil(canvas.height / squareSize) + 1;
+        };
+        window.addEventListener('resize', resize);
+        resize();
+        const draw = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          const startX = Math.floor(offset.current.x / squareSize) * squareSize;
+          const startY = Math.floor(offset.current.y / squareSize) * squareSize;
+          for (let x = startX; x < canvas.width + squareSize; x += squareSize) {
+            for (let y = startY; y < canvas.height + squareSize; y += squareSize) {
+              const sx = x - (offset.current.x % squareSize);
+              const sy = y - (offset.current.y % squareSize);
+              if (
+                hovered.current &&
+                Math.floor((x - startX) / squareSize) === hovered.current.x &&
+                Math.floor((y - startY) / squareSize) === hovered.current.y
+              ) {
+                ctx.fillStyle = hoverFillColor;
+                ctx.fillRect(sx, sy, squareSize, squareSize);
+              }
+              ctx.strokeStyle = borderColor;
+              ctx.strokeRect(sx, sy, squareSize, squareSize);
+            }
+          }
+          const grad = ctx.createRadialGradient(
+            canvas.width/2, canvas.height/2, 0,
+            canvas.width/2, canvas.height/2, Math.hypot(canvas.width, canvas.height)/2
+          );
+          grad.addColorStop(0, 'rgba(0,0,0,0)');
+          ctx.fillStyle = grad;
+          ctx.fillRect(0,0,canvas.width,canvas.height);
+        };
+        const animate = () => {
+          const sp = Math.max(speed, 0.1);
+          switch(direction) {
+            case 'right': offset.current.x = (offset.current.x - sp + squareSize) % squareSize; break;
+            case 'left': offset.current.x = (offset.current.x + sp + squareSize) % squareSize; break;
+            case 'up': offset.current.y = (offset.current.y + sp + squareSize) % squareSize; break;
+            case 'down': offset.current.y = (offset.current.y - sp + squareSize) % squareSize; break;
+            case 'diagonal':
+              offset.current.x = (offset.current.x - sp + squareSize) % squareSize;
+              offset.current.y = (offset.current.y - sp + squareSize) % squareSize;
+              break;
+            default: break;
+          }
+          draw();
+          requestRef.current = requestAnimationFrame(animate);
+        };
+        const onMove = e => {
+          const rect = canvas.getBoundingClientRect();
+          const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+          const sx0 = Math.floor(offset.current.x / squareSize) * squareSize;
+          const sy0 = Math.floor(offset.current.y / squareSize) * squareSize;
+          const hx = Math.floor((mx + offset.current.x - sx0)/squareSize);
+          const hy = Math.floor((my + offset.current.y - sy0)/squareSize);
+          hovered.current = { x: hx, y: hy };
+        };
+        canvas.addEventListener('mousemove', onMove);
+        canvas.addEventListener('mouseleave', () => { hovered.current = null; });
+        animate();
+        return () => {
+          window.removeEventListener('resize', resize);
+          cancelAnimationFrame(requestRef.current);
+          canvas.removeEventListener('mousemove', onMove);
+        };
+      }, [direction, speed, borderColor, hoverFillColor, squareSize]);
+      return <canvas ref={canvasRef} className={`squares-canvas ${className}`}></canvas>;
+    };
+    ReactDOM.render(
+      <Squares
+        speed={0.5}
+        squareSize={40}
+        direction="diagonal"
+        borderColor="#666"
+        hoverFillColor="#333"
+      />,
+      document.getElementById('squares-wrapper')
+    );
+  </script>
+</body>
+</html>
+
